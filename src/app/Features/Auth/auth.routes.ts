@@ -1,14 +1,23 @@
 import { Routes } from '@angular/router';
 import path from 'path';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { ValidateCodeComponent } from './validate-code/validate-code.component';
 
-export default[
+export const authRoutes:Routes =[
+   
     {
         path: 'login',
-        loadComponent: () => import('./login/login.component').then(m => m.LoginComponent),
-    },
+        component:LoginComponent
+      }
+    ,
     {
         path: 'register',
-        loadComponent: () => import('./register/register.component').then(m => m.RegisterComponent),
+       component:RegisterComponent
+    },
+    {
+      path:'verificarCodigo/:username',
+      component:ValidateCodeComponent
     }
 
-]as Routes;
+]

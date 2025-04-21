@@ -1,1 +1,76 @@
-<p>register works!</p>
+
+<section class="bg-gray-50 dark:bg-gray-900">
+    <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+            <img class="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo">
+            Flowbite    
+        </a>
+        <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                    Create an account
+                </h1>
+                <form class="space-y-4 md:space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                    <div>
+                      <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
+                      <input type="text" id="nombre" formControlName="name" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tu nombre" required>
+                      @if (isRequired('name')) {
+                        <small  class="text-red-400">Este campo es requerido</small>
+                    }
+                   
+                    </div>
+                    <div>
+                      <label for="apellido" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido</label>
+                      <input type="text" id="apellido" formControlName="lastName" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tu apellido" required>
+                      @if (isRequired('lastName')) {
+                        <small  class="text-red-400">Este campo es requerido</small>
+                    }
+                   
+                    </div>
+                    <div>
+                      <label for="dni" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">DNI</label>
+                      <input type="text" id="dni" formControlName="dni"class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  placeholder="12345678" required>
+                      @if (isRequired('dni')) {
+                        <small class="text-red-400">Este campo es requerido</small>
+                      } @else if (isValidateNum('dni')) {
+                        <small class="text-red-400">Este campo debe ser numérico</small>
+                      } @else if (isValidateDNI('dni')) {
+                        <small class="text-red-400">Este campo debe tener 8 dígitos</small>
+                      }
+                      
+                  
+                    </div>
+                    <div>
+                      <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                      <input type="email" id="email" formControlName="username" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="correo@ejemplo.com" required>
+                      @if(isRequired('username')) {
+                        <small class="text-red-400">Este campo es requerido</small>
+                        } @if(hasEmailError()) {
+                        <small class="text-red-400">El correo debe ser valido</small>
+                        }
+                    </div>
+                    <div>
+                      <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                      <input type="password" id="password" formControlName="password" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  placeholder="••••••••" required>
+                      @if (isRequired('password')) {
+                        <small  class="text-red-400">Este campo es requerido</small>
+                     }@else if (isMinPassword()) {
+                        <small  class="text-red-400">Debe tener como minimo 6 digitos</small>
+                     }
+                    </div>
+                    <div>
+                      <label for="confirmPassword" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
+                      <input type="password" id="confirmPassword" formControlName="confirmPassword" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  placeholder="••••••••" required>
+                      @if (isRequired('confirmPassword')) {
+                        <small  class="text-red-400">Este campo es requerido</small>
+                     }@else if (isValidatePassword()) {
+                        <small  class="text-red-400">No coinciden las contraseñas</small>
+                     }
+                    </div>
+                    <button type="submit"class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" >Create an account</button>
+                  </form>
+                  
+            </div>
+        </div>
+    </div>
+  </section>

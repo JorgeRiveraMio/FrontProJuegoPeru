@@ -1,5 +1,11 @@
 import { Routes } from "@angular/router";
+import { FullComponent } from "./full.component";
 
-export default[
 
-]as Routes;
+export const fullRoutes: Routes = [
+    {
+        
+    
+       
+    }
+];
