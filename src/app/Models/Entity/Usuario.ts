@@ -5,7 +5,8 @@ import { Rol } from "./Rol";
 export interface Usuario extends Persona {
     username: string;
     password: string;
-    tipoUsuario:TipoUsuario;
-    roles: string[];
+    tipoUsuario: TipoUsuario;
+    rol: Rol[]; 
 }
-export type UsuarioRegistro = Omit<Usuario, 'idPersona' >
+
+export type UsuarioRegistro = Omit<Usuario, 'idPersona'>;

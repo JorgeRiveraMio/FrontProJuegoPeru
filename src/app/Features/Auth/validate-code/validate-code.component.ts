@@ -36,13 +36,12 @@ export class ValidateCodeComponent {
       const code = this.validateForm.value.code;
       console.log('Form is valid',code);
       this._usuarioService.verificarCodigo(this.username, code!).subscribe({
-        next:(response) => {
-           toastCorrect('El codigo es correcto!');
-         
+        next:() => {
+            toastCorrect('El codigo es correcto!');
             this._router.navigate(['/authentication/login']);
         },
-        error:(error) => {
-         
+        error:(err) => {
+          console.error(err);
           toastError('El codigo es incorrecto!');
         }
       })
