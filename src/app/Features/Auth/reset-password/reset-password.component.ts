@@ -45,16 +45,16 @@ export class ResetPasswordComponent implements OnInit {
       this.resetForm.markAllAsTouched();
       return;
     }
-
+  
     const { token, nuevaContrasena } = this.resetForm.value;
-
+  
     this._authService.resetPassword(token!, nuevaContrasena!).subscribe({
       next: () => {
         toastCorrect('Contraseña actualizada correctamente');
+        
         setTimeout(() => {
-          this.cdr.detectChanges();  // Forzar la detección de cambios antes de la redirección
           this._router.navigate(['/authentication/login']);
-        }, 500); // medio segundo para que el toast aparezca antes
+        }, 0);
       },
       error: (err) => {
         console.error(err);
@@ -62,4 +62,5 @@ export class ResetPasswordComponent implements OnInit {
       },
     });
   }
+  
 }

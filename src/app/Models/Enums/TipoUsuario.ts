@@ -1,5 +1,5 @@
 
 export enum TipoUsuario {
-    EMPLEADO,
-    CLIENTE
+    EMPLEADO = "EMPLEADO",
+    CLIENTE = "CLIENTE"
 }

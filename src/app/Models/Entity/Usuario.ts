@@ -1,12 +1,17 @@
-import { Persona } from "./Persona";
 import { TipoUsuario } from "../Enums/TipoUsuario";
 import { Rol } from "./Rol";
 
-export interface Usuario extends Persona {
+export interface Usuario {
+
+    idUsuario: number;
+    name: string;
+    lastname: string;
+    dni: string;
     username: string;
     password: string;
     tipoUsuario: TipoUsuario;
-    rol: Rol[]; 
+    rol: Rol; 
 }
 
-export type UsuarioRegistro = Omit<Usuario, 'idPersona'>;
+export type UsuarioRegistro = Omit<Usuario, 'idUsuario'>;
+

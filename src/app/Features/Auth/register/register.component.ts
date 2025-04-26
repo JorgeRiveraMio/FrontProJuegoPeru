@@ -1,17 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router} from '@angular/router';
-import { CommonModule } from '@angular/common';  // Aquí es donde debe ir CommonModule
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { isRequired, hasEmailError, isValidateDNI, isValidateNum, isValidatePassword, toastCorrect, isMinPassword, toastError } from '../../../Core/validators';
-import { Usuario } from '../../../Models/Entity/Usuario';
+import { ClienteRegistro } from '../../../Models/Entity/Cliente'; 
 import { UsuarioService } from '../../../Core/Services/usuario.service';
 import { TipoUsuario } from '../../../Models/Enums/TipoUsuario';
+import { EstadoCliente } from '../../../Models/Enums/EstadoCliente'; 
 import { DniService } from '../../../Core/Services/dni.service';
-
 
 @Component({
     selector: 'app-register',
-    imports: [ReactiveFormsModule, CommonModule],  
+    imports: [ReactiveFormsModule, CommonModule],
     templateUrl: './register.component.html',
     styleUrl: './register.component.css'
 })
@@ -27,8 +27,11 @@ export class RegisterComponent {
         dni: ['', [Validators.required, Validators.minLength(8)]],
         username: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
-        confirmPassword: ['', Validators.required]
+        confirmPassword: ['', Validators.required],
+        direccion: ['', []], 
+        telefono: ['', []]   
     });
+
 
     isRequired(field: string) {
         return isRequired(field, this.registerForm);
@@ -86,34 +89,30 @@ export class RegisterComponent {
     }
 
     onSubmit() {
-        if (this.registerForm.valid) {
-        // const usuario :Usuario =this.registerForm.value as Usuario;
-        type UsuarioRegistro = Omit<Usuario, 'idPersona'>; // Exclude 'id' and 'roles' from Usuario type
-        const usuario: UsuarioRegistro = {
-            name: this.registerForm.value.name as string,
-            lastname: this.registerForm.value.lastName as string,
-            dni: this.registerForm.value.dni as string,
-            username: this.registerForm.value.username as string,
-            password: this.registerForm.value.password as string,
+    if (this.registerForm.valid) {
+        const cliente: ClienteRegistro = {
+            name: this.registerForm.value.name!,
+            lastname: this.registerForm.value.lastName!,
+            dni: this.registerForm.value.dni!,
+            username: this.registerForm.value.username!,
+            password: this.registerForm.value.password!,
             tipoUsuario: TipoUsuario.CLIENTE,
-            rol: [{ id: 1, name: 'ROLE_CLIENTE' }] 
+            rol: { id: 1, name: 'ROLE_CLIENTE' }, // 👈 Un objeto Rol
+            direccion: this.registerForm.value.direccion!,
+            telefono: this.registerForm.value.telefono!,
+            estado: EstadoCliente.ACTIVO
         };
 
-        this._usuarioService.enviarCodigo(usuario).subscribe({
+        this._usuarioService.enviarCodigo(cliente).subscribe({
             next: (response) => {
-            console.log('Verification code sent successfully', response);
-            toastCorrect('Verification code sent successfully!');
-            console.log(usuario);
-            this._router.navigate(['/authentication/verificarCodigo', usuario.username]);
+            console.log('Respuesta del backend:', response);
+            toastCorrect('Código enviado!');
+            this._router.navigate(['/authentication/verificarCodigo', cliente.username]);
             },
-            error: (error) => {
-            console.error('Error sending verification code', error);
-            toastError('Error sending verification code');
-            }
+            error: () => toastError('Error enviando el código')
         });
-
         } else {
-        toastError('Error sending verification code');
+        toastError('Completa todos los campos!');
         }
     }
 }
