@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule], // 👈 esto es clave para que funcione [formGroup]
   templateUrl: './forgot-password.component.html',
+  styleUrl: './forgot-password.component.css'
 })
 export class ForgotPasswordComponent {
   form: FormGroup;

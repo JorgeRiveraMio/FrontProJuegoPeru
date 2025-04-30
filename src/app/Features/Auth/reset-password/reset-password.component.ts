@@ -10,6 +10,7 @@ import { toastCorrect, toastError } from '../../../Core/validators';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './reset-password.component.html',
+  styleUrl: './reset-password.component.css'
 })
 export class ResetPasswordComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);

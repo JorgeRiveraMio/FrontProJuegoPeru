@@ -1,12 +1,13 @@
 import { Component, inject, input } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioService } from '../../../Core/Services/usuario.service';
 import { isRequired, toastCorrect, toastError } from '../../../Core/validators';
 
 @Component({
   selector: 'app-validate-code',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './validate-code.component.html',
   styleUrl: './validate-code.component.css'
 })
@@ -16,9 +17,8 @@ export class ValidateCodeComponent {
   private readonly _route = inject(ActivatedRoute);
   private readonly _usuarioService = inject(UsuarioService);
   username : string ='';
- 
   
- validateForm = this._formBuilder.group({
+  validateForm = this._formBuilder.group({
     code: ['', Validators.required],
   });
   ngOnInit(): void {

@@ -1,24 +1,27 @@
-<section class="bg-gray-50 dark:bg-gray-900">
-  <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-    <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-      <img class="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo">
-      Flowbite    
+<section class="bg-fondo">
+  <div class="flex flex-col items-center justify-center px-4 sm:px-6 py-8 mx-auto min-h-screen lg:py-0">
+    
+    <!-- Logo fuera del fondo blanco -->
+    <a href="#" class="flex flex-col items-center mb-6 z-10">
+      <img src="/assets/icono.png" alt="Logo Pro Juego Perú" class="logo-img mb-2">
     </a>
-    <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-      <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-        <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-          Create an account
-        </h1>
-        <form class="space-y-4 md:space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+    <!-- Formulario con fondo blanco -->
+    <div class="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md xl:max-w-md bg-white rounded-2xl shadow-xl z-10">
+      <div class="p-6 sm:p-8 space-y-4">
+        <h1 class="text-2xl font-bold text-center text-black">Crear cuenta</h1>
+
+        <form class="space-y-4" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
           <!-- DNI -->
           <div>
-            <label for="dni" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">DNI</label>
-            <div class="flex gap-2">
+            <label for="dni" class="block mb-2 text-sm font-medium text-black">DNI</label>
+            <div class="flex flex-col sm:flex-row gap-2">
               <input type="text" id="dni" formControlName="dni"
-                class="flex-1 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                class="flex-1 bg-white border text-black rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 transition"
                 placeholder="12345678" required>
               <button type="button" (click)="consultarDni()"
-                class="bg-blue-600 text-white px-4 rounded hover:bg-blue-700 transition">
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-semibold shadow w-full sm:w-auto">
                 Consultar
               </button>
             </div>
@@ -29,49 +32,55 @@
 
           <!-- Nombre -->
           <div>
-            <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nombre</label>
-            <input type="text" id="nombre" formControlName="name" [readonly]="true"
-              class="bg-gray-200 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            <label for="nombre" class="block mb-2 text-sm font-medium text-black">Nombre</label>
+            <input type="text" id="nombre" formControlName="name" readonly
+              class="bg-white border text-black rounded-lg block w-full p-2.5 cursor-not-allowed transition"
               placeholder="Nombre" [disabled]="true">
           </div>
 
           <!-- Apellido -->
           <div>
-            <label for="apellido" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellido</label>
-            <input type="text" id="apellido" formControlName="lastName" [readonly]="true"
-              class="bg-gray-200 border border-gray-300 text-gray-900 rounded-lg block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            <label for="apellido" class="block mb-2 text-sm font-medium text-black">Apellido</label>
+            <input type="text" id="apellido" formControlName="lastName" readonly
+              class="bg-white border text-black rounded-lg block w-full p-2.5 cursor-not-allowed transition"
               placeholder="Apellido" [disabled]="true">
           </div>
 
-
           <!-- Email -->
           <div>
-            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-            <input type="email" id="email" formControlName="username" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="correo@ejemplo.com" required>
+            <label for="email" class="block mb-2 text-sm font-medium text-black">Email</label>
+            <input type="email" id="email" formControlName="username"
+              class="bg-white border text-black rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 transition"
+              placeholder="correo@ejemplo.com" required>
             <small *ngIf="isRequired('username')" class="text-red-400">Este campo es requerido</small>
-            <small *ngIf="hasEmailError()" class="text-red-400">El correo debe ser válido</small>
+            <small *ngIf="hasEmailError()" class="text-red-400">Correo no válido</small>
           </div>
-          
 
           <!-- Password -->
           <div>
-            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-            <input type="password" id="password" formControlName="password" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="••••••••" required>
+            <label for="password" class="block mb-2 text-sm font-medium text-black">Contraseña</label>
+            <input type="password" id="password" formControlName="password"
+              class="bg-white border text-black rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 transition"
+              placeholder="••••••••" required>
             <small *ngIf="isRequired('password')" class="text-red-400">Este campo es requerido</small>
-            <small *ngIf="isMinPassword()" class="text-red-400">Debe tener como mínimo 6 dígitos</small>
+            <small *ngIf="isMinPassword()" class="text-red-400">Mínimo 6 caracteres</small>
           </div>
 
-          <!-- Confirm Password -->
+          <!-- Confirmar Password -->
           <div>
-            <label for="confirmPassword" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
-            <input type="password" id="confirmPassword" formControlName="confirmPassword" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="••••••••" required>
+            <label for="confirmPassword" class="block mb-2 text-sm font-medium text-black">Confirmar Contraseña</label>
+            <input type="password" id="confirmPassword" formControlName="confirmPassword"
+              class="bg-white border text-black rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 transition"
+              placeholder="••••••••" required>
             <small *ngIf="isRequired('confirmPassword')" class="text-red-400">Este campo es requerido</small>
-            <small *ngIf="isValidatePassword()" class="text-red-400">No coinciden las contraseñas</small>
+            <small *ngIf="isValidatePassword()" class="text-red-400">Las contraseñas no coinciden</small>
           </div>
 
-          <!-- Submit Button -->
-          <button type="submit" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            Create an account
+          <!-- Submit -->
+          <button type="submit"
+            class="w-full bg-[#0077b6] text-white font-bold py-2 rounded hover:bg-[#005f8e] transition shadow disabled:opacity-50"
+            [disabled]="registerForm.invalid">
+            Registrarse
           </button>
         </form>
       </div>
