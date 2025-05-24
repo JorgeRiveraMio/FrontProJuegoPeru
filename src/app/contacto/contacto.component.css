@@ -1,0 +1,13 @@
+.fondo{
+    height: 100vh;
+    background-color: #e6f9ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-image: url('/assets/contacto.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 2rem;
+  }

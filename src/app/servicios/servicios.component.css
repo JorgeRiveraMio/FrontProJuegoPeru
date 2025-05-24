@@ -1,0 +1,84 @@
+.tituloo{
+    display: inline-block;
+    font-family:'Titan One', cursive;
+    background-color: rgba(255, 255, 255, 0.8);
+    margin-top: 20px;
+    padding: 0.5rem 1.5rem;
+    border-radius: 12px;
+    font-size: 3rem;
+    font-weight: 900;
+    color: #1c5cd3;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.425);
+    text-align: center;
+    position: relative;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+
+    /* Animacion de entrada */
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.tituloo::after {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 4px;
+    background-color: red;
+    left: 50%;
+    bottom: -12px;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+.tituloo.visible{
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.fondo{
+    background-image: url('/assets/backk.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.cards {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #ffffffcc;
+    text-align: center;
+  }
+  
+  .cards:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .titulo {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 700;
+    color: #367caa;
+    margin-bottom: 1rem;
+  }
+  
+  .texto {
+    color: #333;
+    font-size: 1rem;
+    line-height: 1.6;
+    padding: 0 1rem;
+  }
+  
+  .imagen {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    height: 220px;
+    object-fit: cover;
+  }

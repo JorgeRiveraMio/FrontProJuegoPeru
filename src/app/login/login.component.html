@@ -1,0 +1,66 @@
+<div class="fondo">
+  <div class="capa"></div>
+
+  <div class="logo text-center mb-1">
+    <img src="assets/icono.png" alt="Logo Pro Juego Perú" class="img-fluid logo-img">
+  </div>
+
+  <div class="login-container">
+
+    <!-- FORMULARIO LOGIN -->
+    <form *ngIf="!mostrarRecuperar" [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
+      <h2 class="text-center mb-4">Bienvenido(a)</h2>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Correo electrónico</label>
+        <input id="email" type="email" formControlName="username" class="form-control" placeholder="correo@ejemplo.com">
+        <small *ngIf="isRequired('username')" class="text-danger">Este campo es requerido</small>
+        <small *ngIf="hasEmailError()" class="text-danger">Ingrese un correo válido</small>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input id="password" type="password" formControlName="password" class="form-control" placeholder="*********">
+        <small *ngIf="isRequired('password')" class="text-danger">Este campo es requerido</small>
+
+      </div>
+
+      <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="rememberMe">
+        <label class="form-check-label" for="rememberMe">Recordar mi contraseña</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mb-2">Ingresar</button>
+
+      <p class="text-center small">
+        <a class="recuperar" (click)="irARecuperar()">¿Olvidaste tu contraseña?</a>
+      </p>
+
+      <p class="text-center small">
+        ¿Aún no tienes una cuenta? <br><strong>Pro Juego Perú</strong>
+      </p>
+
+      <button type="button" class="btn btn-dark w-100" (click)="irACrearCuenta()">Crear cuenta</button>
+    </form>
+
+    <!-- FORMULARIO RECUPERAR CONTRASEÑA -->
+    <form *ngIf="mostrarRecuperar" [formGroup]="recuperarForm" (ngSubmit)="onSubmitRecuperar()">
+      <h2 class="text-center mb-4">Restablecer contraseña</h2>
+
+      <div class="mb-3">
+        <label for="username" class="form-label">Correo electrónico</label>
+        <input id="username" type="email" formControlName="username" class="form-control" placeholder="correo@ejemplo.com">
+        <small *ngIf="isRequired('username')" class="text-danger">Este campo es requerido</small>
+        <small *ngIf="hasEmailError()" class="text-danger">Ingrese un correo válido</small>
+
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mb-2">Enviar código</button>
+
+      <p class="text-center small">
+        <a class="recuperar" (click)="volverAlLogin()">Volver al login</a>
+      </p>
+    </form>
+
+  </div>
+</div>

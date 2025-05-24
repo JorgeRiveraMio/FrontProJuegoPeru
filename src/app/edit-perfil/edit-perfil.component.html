@@ -1,0 +1,86 @@
+<div class="d-flex flex-column flex-md-row">
+<div [class.collapsed]="isCollapsed" class="sidebar">
+    <button class="toggle-btn" (click)="toggleSidebar()">☰</button>
+    <div class="sidebar-header p-3 border-bottom">
+      <p class="welcome-text mb-0">Bienvenido(a),</p>
+      <h5 class="username">{{ nombreUsuario }}</h5>
+    </div>
+    <ul class="nav flex-column">
+      <li>
+        <a routerLink="/inicio-principal" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-house me-2"></i>
+          <span class="link-text">Inicio</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/edit-perfil" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-user me-2"></i>
+          <span class="link-text">Perfil</span>
+        </a>
+      </li>
+
+      <!-- Solo para ADMIN mostramos Terapeuta -->
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/terapeuta" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-user-doctor me-2"></i>
+          <span class="link-text">Terapeuta</span>
+        </a>
+      </li>
+
+      <li>
+        <a (click)="cerrarSesion()" class="nav-link" style="cursor: pointer;">
+          <i class="fa-solid fa-right-from-bracket me-2"></i>
+          <span class="link-text">Cerrar sesión</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="main-content d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="perfil-card p-4 shadow-sm rounded-4">
+      <h3 class="mb-4 text-primary text-center">Mi Perfil</h3>
+  
+      <div *ngIf="cargando">Cargando perfil...</div>
+  
+      <form *ngIf="!cargando" [formGroup]="perfilForm" (ngSubmit)="guardar()">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" formControlName="name">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Apellido</label>
+            <input type="text" class="form-control" formControlName="lastname">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">DNI</label>
+            <input type="text" class="form-control" formControlName="dni">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Usuario</label>
+            <input type="text" class="form-control" formControlName="username">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Contraseña</label>
+            <input type="password" class="form-control" formControlName="password">
+          </div>
+          <div class="col-md-6 mb-3" *ngIf="rolUsuario === 'ROLE_ADMIN'">
+            <label class="form-label">Especialidad</label>
+            <input type="text" class="form-control" formControlName="especialidad" readonly>
+          </div>
+          <div class="col-md-6 mb-3" *ngIf="rolUsuario === 'ROLE_TUTOR'">
+            <label class="form-label">Teléfono</label>
+            <input type="text" class="form-control" formControlName="telefono">
+          </div>
+          <div class="col-12 mb-3" *ngIf="rolUsuario === 'ROLE_TUTOR'">
+            <label class="form-label">Dirección</label>
+            <input type="text" class="form-control" formControlName="direccion">
+          </div>
+        </div>
+        <div class="text-end">
+          <button type="submit" class="btn btn-primary px-4" [disabled]="perfilForm.invalid">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

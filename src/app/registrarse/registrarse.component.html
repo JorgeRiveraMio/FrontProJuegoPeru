@@ -1,0 +1,88 @@
+<div class="fondo">
+  <div class="capa"></div>
+
+  <div class="contenido">
+    <div class="text-center mb-4">
+      <img src="assets/icono.png" alt="Logo Pro Juego Perú" class="logo-img mb-2">
+      <h1 class="logg">Pro Juego Perú</h1>
+    </div>
+
+    <div class="card shadow-lg" style="max-width: 400px; width: 100%;">
+      <div class="card-body p-4">
+
+        <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+          <h2 class="text-center mb-4">Crear cuenta</h2>
+
+          <div class="mb-3">
+            <label for="dni" class="form-label">DNI</label>
+            <div class="input-group">
+              <input type="text" id="dni" formControlName="dni" class="form-control" placeholder="12345678">
+              <button type="button" class="btn btn-primary" (click)="consultarDni()">Consultar</button>
+            </div>
+            <small *ngIf="isRequired('dni')" class="text-danger">Este campo es requerido</small>
+            <small *ngIf="isValidateNum('dni')" class="text-danger">Debe ser numérico</small>
+            <small *ngIf="isValidateDNI('dni')" class="text-danger">Debe tener 8 dígitos</small>
+          </div>
+
+          <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" id="nombre" formControlName="nombre" class="form-control" placeholder="Nombre" readonly>
+          </div>
+
+          <div class="mb-3">
+            <label for="apellido" class="form-label">Apellido</label>
+            <input type="text" id="apellido" formControlName="apellido" class="form-control" placeholder="Apellido" readonly>
+          </div>
+
+          <div class="mb-3">
+            <label for="username" class="form-label">Correo electrónico</label>
+            <input type="email" id="username" formControlName="username" class="form-control" placeholder="correo@ejemplo.com">
+            <small *ngIf="isRequired('username')" class="text-danger">Campo requerido</small>
+            <small *ngIf="hasEmailError()" class="text-danger">Correo no válido</small>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" id="password" formControlName="password" class="form-control" placeholder="••••••••">
+            <small *ngIf="isRequired('password')" class="text-danger">Campo requerido</small>
+            <small *ngIf="isMinPassword()" class="text-danger">Mínimo 6 caracteres</small>
+          </div>
+
+          <div class="mb-3">
+            <label for="confirmarPassword" class="form-label">Confirmar Contraseña</label>
+            <input type="password" id="confirmarPassword" formControlName="confirmarPassword" class="form-control" placeholder="••••••••">
+            <small *ngIf="isRequired('confirmarPassword')" class="text-danger">Campo requerido</small>
+            <small *ngIf="isValidatePassword()" class="text-danger">Las contraseñas no coinciden</small>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100" [disabled]="registroForm.invalid">Registrarse</button>
+        </form>
+
+        <div class="modal" [class.show]="mostrarModal" [style.display]="mostrarModal ? 'block' : 'none'">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+        
+              <div class="modal-header">
+                <h5 class="modal-title">Verificar Código</h5>
+                <button type="button" class="btn-close" aria-label="Close" (click)="cerrarModal()"></button>
+              </div>
+        
+              <div class="modal-body">
+                <form [formGroup]="validateForm" (ngSubmit)="onSubmitCodigo()">
+                  <div class="mb-3">
+                    <label for="codigo" class="form-label">Código de Verificación</label>
+                    <input type="text" id="codigo" formControlName="code" class="form-control" placeholder="Ingresa el código">
+                    <small *ngIf="isRequiredCode()" class="text-danger">Este campo es requerido</small>
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100 mt-3">Verificar</button>
+                </form>
+              </div>
+        
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

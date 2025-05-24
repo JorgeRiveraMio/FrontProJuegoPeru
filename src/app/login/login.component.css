@@ -1,0 +1,82 @@
+.fondo{
+    height: 100vh;
+    background-color: #e6f9ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-image: url('/assets/fondoo.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    padding: 2rem;
+  }
+
+.fondo .capa {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7); /* Ajusta el 0.6 según lo translúcido que lo quieras */
+    z-index: 0;
+}
+
+.fondo > .logo,
+.fondo > .login-container {
+  position: relative;
+  z-index: 1;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+  
+.logo-img {
+    max-width: 160px;
+    height: auto;
+    filter: drop-shadow(0 2px 6px rgba(70, 64, 64, 0.733));
+  }
+
+.logg{
+    display: flex;
+    font-family:'Titan One', cursive;
+    background-color: rgb(255, 255, 255);
+    margin-top: 20px;
+    padding: 0.5rem 1.5rem;
+    border-radius: 12px;
+    font-size: 3rem;
+    font-weight: 900;
+    color: #1c5cd3;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.425);
+    text-align: center;
+    position: relative;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.login-container {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.btn-primary {
+    background-color: #0077b6;
+    border: none;
+    border-radius: 20px;
+}
+  
+  .btn-dark {
+    background-color: #003049;
+    border-radius: 20px;
+}
+
+.recuperar{
+  cursor: pointer;
+  color: blue;
+}

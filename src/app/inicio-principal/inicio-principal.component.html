@@ -1,0 +1,85 @@
+<div class="d-flex flex-column flex-md-row">
+  <div [class.collapsed]="isCollapsed" class="sidebar">
+    <button class="toggle-btn" (click)="toggleSidebar()">☰</button>
+    <div class="sidebar-header p-3 border-bottom">
+      <p class="welcome-text mb-0">Bienvenido(a),</p>
+      <h5 class="username">{{ nombreUsuario }}</h5>
+    </div>
+    <ul class="nav flex-column">
+      <li>
+        <a routerLink="/inicio-principal" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-house me-2"></i>
+          <span class="link-text">Inicio</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/edit-perfil" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-user me-2"></i>
+          <span class="link-text">Perfil</span>
+        </a>
+      </li>
+
+      <!-- Solo para ADMIN mostramos Terapeuta -->
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/terapeuta" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-user-doctor me-2"></i>
+          <span class="link-text">Terapeuta</span>
+        </a>
+      </li>
+
+      <li>
+        <a (click)="cerrarSesion()" class="nav-link" style="cursor: pointer;">
+          <i class="fa-solid fa-right-from-bracket me-2"></i>
+          <span class="link-text">Cerrar sesión</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="main-content mt-4">
+    <div class="logo-container mb-4">
+      <img src="assets/logoo.png" alt="Logo Marca" class="logo" />
+    </div>
+
+    <!-- VISTA ROLE_TUTOR -->
+    <ng-container *ngIf="rolUsuario === 'ROLE_TUTOR'">
+      <h2>Citas</h2>
+      <div class="btn-group-vertical citas-group">
+        <button class="btn citas w-100 d-flex align-items-center px-4" (click)="irRegistrarCita()">
+          <i class="fa-solid fa-calendar-plus me-2"></i> Registrar Cita
+        </button>
+        <button class="btn citas w-100 d-flex align-items-center px-4" (click)="irCitasGeneradas()">
+          <i class="fa-solid fa-calendar-check me-2"></i> Citas Generadas
+        </button>
+      </div>
+
+      <h2 class="mt-4">Ordenes</h2>
+      <div class="btn-group-vertical ordenes-group">
+        <button class="btn orden w-100 d-flex align-items-center px-4" (click)="irRecetas()">
+          <i class="fa-solid fa-file-medical me-2"></i> Recetas
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- VISTA ROLE_ADMIN -->
+    <ng-container *ngIf="rolUsuario === 'ROLE_ADMIN'">
+      <h2 class="mt-4">Citas</h2>
+      <div class="btn-group-vertical citas-group">
+        <button class="btn citas w-100 d-flex align-items-center px-4" (click)="irCitasGeneradas()">
+          <i class="fa-solid fa-calendar-check me-2"></i> Citas
+        </button>
+        <button class="btn citas w-100 d-flex align-items-center px-4" (click)="irDisponibilidad()">
+          <i class="fa-solid fa-clock me-2"></i> Disponibilidad
+        </button>
+      </div>
+      <h2 class="mt-4">Pagos</h2>
+      <div class="btn-group-vertical citas-group">
+        <button class="btn pago w-100 d-flex align-items-center px-4" (click)="irCitasGeneradas()">
+          <i class="fa-solid fa-wallet me-2"></i> Pagos
+        </button>
+      </div>
+    </ng-container>
+
+  </div>
+</div>
+

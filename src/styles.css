@@ -1,0 +1,30 @@
+.carrusel-img{
+    height: 100%;
+    object-fit: cover;
+}
+
+.redes i:hover{
+    color: #e6c50a !important;
+}
+
+.barra :hover{
+    color: #e6c50a !important;
+}
+
+.login:hover{
+    color: #0be64c !important;
+}
+
+@media (max-width: 600px) {
+    .navbar-redes .fa-xl {
+      font-size: 0.9rem !important;
+    }
+    .navbar-redes .nav-link {
+      font-size: 0.5rem;
+      padding: 0.15rem 0.25rem;
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
