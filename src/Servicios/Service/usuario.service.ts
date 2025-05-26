@@ -6,6 +6,7 @@ import { Usuario, UsuarioRegistro } from '../../Modelos/Entity/Usuario';
 import { UsuarioActual } from '../../Modelos/Entity/UsuarioActual';
 import { AuthResponse } from '../../Modelos/auth-response';
 import { EmpleadoRegistro } from '../../Modelos/Entity/Empleado';
+import { EmpleadoActualizacion } from '../../Modelos/Entity/EmpleadoEdicion';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ import { EmpleadoRegistro } from '../../Modelos/Entity/Empleado';
 export class UsuarioService {
   private readonly _apiUrl = appsettingsCliente.apiUrl + '/security';
   private readonly http = inject(HttpClient);
-
+  
   constructor() { }
 
   enviarCodigo(usuario: UsuarioRegistro): Observable<any> {
@@ -89,4 +90,29 @@ export class UsuarioService {
     };
     return this.http.get<UsuarioActual[]>(`${appsettingsCliente.apiUrl}/empleado/todosTerapeuta`, { headers });
   }
+
+  // eliminar terapeuta
+  eliminarTerapeuta(id: number): Observable<any> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('No se encontró token de autenticación.');
+    }
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+    return this.http.delete(`${appsettingsCliente.apiUrl}/empleado/eliminarEmpleadoId/${id}`, { headers });
+  }
+
+  //Actualizar terapeuta
+  actualizarTerapeuta(id: number, empleadoData: EmpleadoActualizacion): Observable<any> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('No se encontró token de autenticación.');
+    }
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+    return this.http.put(`${appsettingsCliente.apiUrl}/empleado/actualizarPorId/${id}`, empleadoData, { headers });
+  }
+
 }

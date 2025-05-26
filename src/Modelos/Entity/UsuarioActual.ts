@@ -17,5 +17,4 @@ export interface UsuarioActual {
     id: number;
     name: string;
   };
-  
 }
