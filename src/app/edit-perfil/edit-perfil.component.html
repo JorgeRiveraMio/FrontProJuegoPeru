@@ -19,11 +19,33 @@
         </a>
       </li>
 
-      <!-- Solo para ADMIN mostramos Terapeuta -->
+      <!-- Solo para ADMIN barra de navegación -->
       <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
         <a routerLink="/terapeuta" routerLinkActive="active" class="nav-link">
           <i class="fa-solid fa-user-doctor me-2"></i>
           <span class="link-text">Terapeuta</span>
+        </a>
+      </li>
+
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/tutores" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-user-tie me-2"></i>
+          <span class="link-text">Tutor</span>
+        </a>
+      </li>
+
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/pacientes" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-clipboard-user me-2"></i>
+          <span class="link-text">Pacientes</span>
+        </a>
+      </li>
+      
+      <!-- Solo para tutor barra de navegación -->
+      <li *ngIf="rolUsuario === 'ROLE_TUTOR'">
+        <a routerLink="/pacientes" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-clipboard-user me-2"></i>
+          <span class="link-text">Niños a mi cargo</span>
         </a>
       </li>
 
