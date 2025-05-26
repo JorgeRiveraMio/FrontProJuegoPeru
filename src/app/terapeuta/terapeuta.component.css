@@ -41,18 +41,19 @@
     width: 60px;
   }
   
-  .main-content {
-    margin-left: 220px;
-    background-color: #e6e6e6;
-    padding: 2rem;
-    width: calc(100% - 220px);
-    transition: margin-left 0.3s ease, width 0.3s ease;
-  }
+.main-content {
+margin-left: 220px;
+padding: 2rem;
+background-color: #f9f9f9;
+min-height: 100vh;
+width: calc(100% - 220px);
+transition: margin-left 0.3s ease, width 0.3s ease;
+}
 
-  .sidebar.collapsed + .main-content {
-    margin-left: 60px;
-    width: calc(100% - 60px);
-  }
+.sidebar.collapsed + .main-content {
+margin-left: 60px;
+width: calc(100% - 60px);
+}
   
   .toggle-btn {
     background: none;
@@ -132,3 +133,19 @@
     }
   }
 /*   Estilos de aqui hacia arriba encargados de la barra lateral*/
+
+.card {
+  border-radius: 16px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+
+}
+
+.edit{
+    background-color: #0071ba;
+    color: white;
+}
+
+.eliminar{
+    background-color: #dc3545;
+    color: white;
+}
