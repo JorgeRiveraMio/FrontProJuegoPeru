@@ -19,11 +19,33 @@
         </a>
       </li>
 
-      <!-- Solo para ADMIN mostramos Terapeuta -->
+      <!-- Solo para ADMIN barra de navegación -->
       <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
         <a routerLink="/terapeuta" routerLinkActive="active" class="nav-link">
           <i class="fa-solid fa-user-doctor me-2"></i>
           <span class="link-text">Terapeuta</span>
+        </a>
+      </li>
+
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/tutores" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-user-tie me-2"></i>
+          <span class="link-text">Tutor</span>
+        </a>
+      </li>
+
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/pacientes" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-clipboard-user me-2"></i>
+          <span class="link-text">Pacientes</span>
+        </a>
+      </li>
+      
+      <!-- Solo para tutor barra de navegación -->
+      <li *ngIf="rolUsuario === 'ROLE_TUTOR'">
+        <a routerLink="/pacientes" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-clipboard-user me-2"></i>
+          <span class="link-text">Niños a mi cargo</span>
         </a>
       </li>
 
@@ -41,7 +63,7 @@
       <img src="assets/logoo.png" alt="Logo Marca" class="logo" />
     </div>
 
-    <!-- VISTA ROLE_TUTOR -->
+    <!-- VISTA ROLE_TUTOR INTERIOR-->
     <ng-container *ngIf="rolUsuario === 'ROLE_TUTOR'">
       <h2>Citas</h2>
       <div class="btn-group-vertical citas-group">
@@ -59,9 +81,15 @@
           <i class="fa-solid fa-file-medical me-2"></i> Recetas
         </button>
       </div>
+      <h2 class="mt-4">Niños a mi cargo</h2>
+      <div class="btn-group-vertical ordenes-group">
+        <button class="btn orden w-100 d-flex align-items-center px-4" (click)="irRecetas()">
+          <i class="fa-solid fa-hands-holding-child me-2"></i> Tutelados
+        </button>
+      </div>
     </ng-container>
 
-    <!-- VISTA ROLE_ADMIN -->
+    <!-- VISTA ROLE_ADMIN INTERIOR-->
     <ng-container *ngIf="rolUsuario === 'ROLE_ADMIN'">
       <h2 class="mt-4">Citas</h2>
       <div class="btn-group-vertical citas-group">
@@ -76,6 +104,12 @@
       <div class="btn-group-vertical citas-group">
         <button class="btn pago w-100 d-flex align-items-center px-4" (click)="irCitasGeneradas()">
           <i class="fa-solid fa-wallet me-2"></i> Pagos
+        </button>
+      </div>
+      <h2 class="mt-4">Terapeutas</h2>
+      <div class="btn-group-vertical citas-group">
+        <button class="btn terapeuta w-100 d-flex align-items-center px-4" (click)="irCitasGeneradas()">
+          <i class="fa-solid fa-user-doctor me-2"></i> Registro de Terapeutas
         </button>
       </div>
     </ng-container>

@@ -20,5 +20,9 @@ export const routes: Routes = [
     {
         path: 'edit-perfil',
         loadComponent: () => import('./edit-perfil/edit-perfil.component').then(m => m.EditPerfilComponent)
+    },
+    {
+        path: 'terapeuta',
+        loadComponent: () => import('./terapeuta/terapeuta.component').then(m => m.TerapeutaComponent)
     }
 ];

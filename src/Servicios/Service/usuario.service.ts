@@ -77,4 +77,16 @@ export class UsuarioService {
   };
   return this.http.put(`${appsettingsCliente.apiUrl}/empleado/actualizarPorId/${id}`, empleadoData, { headers });
   }
+
+  //Listar terapeutas
+  ListarTerapeutas(): Observable<UsuarioActual[]> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('No se encontró token de autenticación.');
+    }
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+    return this.http.get<UsuarioActual[]>(`${appsettingsCliente.apiUrl}/empleado/todosTerapeuta`, { headers });
+  }
 }

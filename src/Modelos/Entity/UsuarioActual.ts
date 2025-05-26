@@ -12,4 +12,10 @@ export interface UsuarioActual {
   direccion?: string;
   telefono?: string;
   estadoTutor?: string;
+
+  rol?: {
+    id: number;
+    name: string;
+  };
+  
 }

@@ -66,7 +66,7 @@ onSubmitLogin() {
             this.router.navigate(['/inicio-principal']);
             break;
           case 'ROLE_TERAPEUTA':
-            // Redirige donde necesites
+            this.router.navigate(['/inicio-principal']);
             break;
           default:
             this._router.navigate(['/']);
