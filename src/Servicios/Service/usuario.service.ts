@@ -115,4 +115,15 @@ export class UsuarioService {
     return this.http.put(`${appsettingsCliente.apiUrl}/empleado/actualizarPorId/${id}`, empleadoData, { headers });
   }
 
+  //Registrar terapeuta
+  registrarTerapeuta(empleadoData: EmpleadoRegistro): Observable<any> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('No se encontró token de autenticación.');
+    }
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+    return this.http.post(`${appsettingsCliente.apiUrl}/empleado/guardar`, empleadoData, { headers });
+  }
 }

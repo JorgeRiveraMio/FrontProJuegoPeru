@@ -5,7 +5,8 @@ export interface UsuarioActual {
   dni: string;
   username: string;
   idRol: number;
-  
+  password?: string;
+
   especialidad?: string;
   estadoEmpleado?: string; 
   

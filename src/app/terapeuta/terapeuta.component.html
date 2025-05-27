@@ -130,5 +130,61 @@
         </form>
     </div>
 
+    <div class="modal fade" tabindex="-1" [ngClass]="{'show d-block': mostrarRegistroNuevo}" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Registro de Nuevo Terapeuta</h5>
+                    <button type="button" class="btn-close" (click)="cerrarRegistroNuevo()"></button>
+                </div>
+                <form (ngSubmit)="guardarNuevoTerapeuta()" #formNuevo="ngForm">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>Nombre</label>
+                                <input class="form-control" [(ngModel)]="terapeutaNuevo.name" name="name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Apellido</label>
+                                <input class="form-control" [(ngModel)]="terapeutaNuevo.lastname" name="lastname" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>DNI</label>
+                                <input class="form-control" [(ngModel)]="terapeutaNuevo.dni" name="dni" required minlength="8">
+                                <div *ngIf="formNuevo.submitted && formNuevo.controls['dni']?.invalid" class="text-danger">
+                                    El DNI debe tener 8 dígitos numéricos.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Correo</label>
+                                <input class="form-control" type="email" [(ngModel)]="terapeutaNuevo.username" name="username" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Contraseña</label>
+                                <input class="form-control" type="password" [(ngModel)]="terapeutaNuevo.password" name="password" required minlength="6">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Especialidad</label>
+                                <input class="form-control" [(ngModel)]="terapeutaNuevo.especialidad" name="especialidad" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Estado del trabajador</label>
+                                <select class="form-control" [(ngModel)]="terapeutaNuevo.estadoEmpleado" name="estadoEmpleado" required>
+                                    <option value="ACTIVO">ACTIVO</option>
+                                    <option value="INACTIVO">INACTIVO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" [disabled]="formNuevo.invalid">Registrar Terapeuta</button>
+                        <button type="button" class="btn btn-secondary" (click)="cerrarRegistroNuevo()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
     </div>
   </div>

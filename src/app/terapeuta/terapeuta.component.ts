@@ -5,6 +5,7 @@ import { UsuarioService } from '../../Servicios/Service/usuario.service';
 import { UsuarioActual } from '../../Modelos/Entity/UsuarioActual';
 import { EstadoEmpleado } from '../../Modelos/Enums/EstadoEmpleado';
 import { FormsModule } from '@angular/forms';
+import { EmpleadoRegistro } from '../../Modelos/Entity/Empleado';
 
 @Component({
   selector: 'app-terapeuta',
@@ -20,7 +21,10 @@ export class TerapeutaComponent {
   idRol: number = 0;
   terapeutas: UsuarioActual[] = [];
   terapeutaEnEdicion: UsuarioActual | null = null;
+  terapeutaNuevo: Partial<UsuarioActual> = {};
   mostrarFormulario = false;
+  mostrarRegistroNuevo = false;
+
 
   constructor(
     private usuarioService: UsuarioService,
@@ -76,9 +80,58 @@ cargarTerapeutas(): void {
 }
 
 //boton para crear un nuevo terapeuta
-nuevo(){
-
+nuevo(): void {
+  this.terapeutaNuevo = {
+    name: '',
+    lastname: '',
+    dni: '',
+    username: '',
+    password: '',
+    especialidad: '',
+    estadoEmpleado: 'ACTIVO',
+    idRol: 3
+  };
+  this.mostrarRegistroNuevo = true;
 }
+
+cerrarRegistroNuevo(): void {
+  this.mostrarRegistroNuevo = false;
+  this.terapeutaNuevo = {};
+}
+
+guardarNuevoTerapeuta(): void {
+  if (!this.terapeutaNuevo) return;
+
+  if (!this.terapeutaNuevo.name || !this.terapeutaNuevo.lastname || !this.terapeutaNuevo.dni ||
+      !this.terapeutaNuevo.username || !this.terapeutaNuevo.password || !this.terapeutaNuevo.especialidad) {
+    alert('Por favor, completa todos los campos obligatorios.');
+    return;
+  }
+
+  const payload: EmpleadoRegistro = {
+    name: this.terapeutaNuevo.name,
+    lastname: this.terapeutaNuevo.lastname,
+    dni: this.terapeutaNuevo.dni,
+    username: this.terapeutaNuevo.username,
+    password: this.terapeutaNuevo.password,
+    especialidad: this.terapeutaNuevo.especialidad,
+    estadoEmpleado: this.terapeutaNuevo.estadoEmpleado === 'ACTIVO' ? 0 : 1,
+    idRol: 3
+  };
+
+  this.usuarioService.registrarTerapeuta(payload).subscribe({
+    next: () => {
+      alert('Terapeuta creado correctamente');
+      this.cerrarRegistroNuevo();
+      this.cargarTerapeutas();
+    },
+    error: (err) => {
+      console.error('Error al crear terapeuta:', err);
+      alert('Ocurrió un error al crear el terapeuta');
+    }
+  });
+}
+
 
 editar(t: UsuarioActual){
   this.terapeutaEnEdicion = { ...t };
