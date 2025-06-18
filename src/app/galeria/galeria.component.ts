@@ -1,6 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import Swiper from 'swiper';
-import { Autoplay } from 'swiper/modules';
+import { Autoplay, FreeMode } from 'swiper/modules';
 
 @Component({
   selector: 'app-galeria',
@@ -9,20 +9,20 @@ import { Autoplay } from 'swiper/modules';
 })
 export class GaleriaComponent implements AfterViewInit {
   ngAfterViewInit(): void {
-    Swiper.use([Autoplay]);
+    Swiper.use([Autoplay, FreeMode]);
 
     const swiper = new Swiper('.galeriaSwiper', {
       loop: true,
-      slidesPerView: 'auto', // usa ancho automático para deslizar suave
+      slidesPerView: 'auto',
       spaceBetween: 20,
-      speed: 4000, // velocidad de animación (ms)
-      freeMode: true, // activa modo libre
+      freeMode: true,
+      speed: 3000, // controla la velocidad del scroll continuo
       autoplay: {
-        delay: 0, // sin pausa entre movimientos
+        delay: 1, // ¡esto es la clave!
         disableOnInteraction: false,
       },
-      grabCursor: true,
+      allowTouchMove: true, // permite que el usuario lo frene si quiere
+      grabCursor: true
     });
   }
-
 }
