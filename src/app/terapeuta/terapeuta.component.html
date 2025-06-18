@@ -81,8 +81,10 @@
                         <td>{{ t.username }}</td>
                         <td>{{ t.especialidad }}</td>
                         <td>
-                            <span class="badge bg-success" *ngIf="t.estadoEmpleado === 'ACTIVO'">Activo</span>
-                            <span class="badge bg-secondary" *ngIf="t.estadoEmpleado !== 'ACTIVO'">Inactivo</span>
+                            <div class="text-center">
+                                <span class="badge bg-success" *ngIf="t.estadoEmpleado === 'ACTIVO'">Activo</span>
+                                <span class="badge bg-secondary" *ngIf="t.estadoEmpleado !== 'ACTIVO'">Inactivo</span>
+                            </div>
                         </td>
                         <div class="text-center">
                             <button class="btn btn-sm edit me-2 rounded" (click)="editar(t)">Editar</button>

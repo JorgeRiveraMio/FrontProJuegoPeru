@@ -54,7 +54,7 @@ onSubmitLogin() {
     this._usuarioService.login(username, password).subscribe({
       next: (response: AuthResponse) => {
         const rol = response.rol[0];
-        console.info(`Has iniciado sesión como ${rol.replace('ROLE_', '')}`);
+        //console.info(`Has iniciado sesión como ${rol.replace('ROLE_', '')}`);
         //console.log('Token recibido:', response.jwt);
         localStorage.setItem('accessToken', response.jwt);
 

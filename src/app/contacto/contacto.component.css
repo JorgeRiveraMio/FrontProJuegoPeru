@@ -1,13 +1,67 @@
-.fondo{
-    height: 100vh;
-    background-color: #e6f9ff;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    background-image: url('/assets/contacto.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    padding: 2rem;
+.fondo {
+  background-color: #7dc002;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 1rem;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  max-height: 500px;
+}
+
+.titulo{
+    font-family: 'Titan One', cursive;
+    font-weight: bold;
+    font-size: 3rem;
+    color: #e6f9ff;
   }
+
+.linea {
+  border-left: 3.5px solid #ffffff;
+  height: 100px;
+}
+
+.altura-ajustada {
+  min-height: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.texto{
+    
+    font-weight: bold;
+    font-size: 1rem;
+    color: #e6f9ff;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.linea-horizontal {
+  width: 60%;
+  height: 3.5px;
+  background-color: #ffffff;
+  margin: 1rem auto;
+}
+
+@media (max-width: 768px) {
+  .titulo h2 {
+    font-size: 1.5rem !important;
+  }
+
+  .texto p {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .redes i {
+    font-size: 20px !important;
+  }
+
+  .linea {
+    height: auto;
+    min-height: 120px;
+  }
+}
