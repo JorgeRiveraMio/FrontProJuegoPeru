@@ -70,6 +70,10 @@ export class InicioPrincipalComponent {
     this.router.navigate(['/recetas']);
   }
 
+  irTutelados() {
+    this.router.navigate(['/tutelados']);
+  }
+
   irDisponibilidad() {
     this.router.navigate(['/disponibilidad']);
   }

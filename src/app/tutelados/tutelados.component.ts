@@ -1,0 +1,192 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { UsuarioService } from '../../Servicios/Service/usuario.service';
+import { UsuarioActual } from '../../Modelos/Entity/UsuarioActual';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Paciente, PacienteRegistro } from '../../Modelos/Entity/Paciente';
+import { PacienteService } from '../../Servicios/Service/paciente.service';
+
+@Component({
+  selector: 'app-tutelados',
+  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  templateUrl: './tutelados.component.html',
+  styleUrl: './tutelados.component.css'
+})
+export class TuteladosComponent implements OnInit {
+  isCollapsed = false;
+  nombreUsuario: string = '';
+  rolUsuario: string = '';
+  TuteladosForm!: FormGroup;
+  IdEncargado: number = 0;
+  cargando = true;
+  mensaje: { tipo: string, texto: string } | null = null;
+  tutelados: Paciente[] = [];
+  mostrarFormularioRegistro: boolean = false;
+  tuteladoEditar: Paciente | null = null;
+  constructor(
+    private router: Router,
+    private usuarioService: UsuarioService,
+    private pacienteService: PacienteService,
+    private fb: FormBuilder
+  ) {}
+
+  ngOnInit(): void {
+    this.cargarUsuario();
+    this.initializeForm();
+  }
+
+  // Método para obtener los datos del usuario
+  cargarUsuario(): void {
+    this.cargando = true;
+    this.usuarioService.obtenerUsuarioActual().subscribe({
+      next: (usuario: UsuarioActual) => {
+        this.nombreUsuario = usuario.name || usuario.username || 'Usuario';
+        this.rolUsuario = this.obtenerRolUsuario(usuario.idRol);
+        this.IdEncargado = usuario.idUsuario;
+       console.log('ID del tutor:', this.IdEncargado); 
+       this.obtenerPacientes();
+      },
+      error: () => {
+        this.nombreUsuario = 'Usuario';
+        this.rolUsuario = '';
+      },
+      complete: () => {
+        this.cargando = false;
+      }
+    });
+  }
+
+  // Método para obtener el rol del usuario
+  obtenerRolUsuario(idRol: number): string {
+    switch (idRol) {
+      case 1: return 'ROLE_TUTOR';
+      case 2: return 'ROLE_ADMIN';
+      case 3: return 'ROLE_TERAPEUTA';
+      default: return '';
+    }
+  }
+
+  // Método para inicializar el formulario
+  initializeForm(): void {
+    this.TuteladosForm = this.fb.group({
+      name: ['', Validators.required],
+      lastname: ['', Validators.required],
+      dni: ['', [Validators.required, Validators.pattern('\\d{8}')]],
+      fechaNacimiento: ['', Validators.required],
+      Sexo: ['', Validators.required],
+      direccion: ['', Validators.required],
+      telefono: ['', Validators.required],
+      escuela: ['', Validators.required],
+      grado: ['', Validators.required]
+    });
+  }
+
+  obtenerPacientes(): void {
+    console.log('ID del tutor en obtenerPacientes:', this.IdEncargado);
+    this.pacienteService.obtenerPacientesPorTutor(this.IdEncargado).subscribe({
+      next: (pacientes) => {
+        this.tutelados = pacientes;  // Almacenar los pacientes en la variable 'tutelados'
+        this.cargando = false;  // Detener la carga
+      },
+      error: (error) => {
+        console.error('Error al obtener los pacientes', error);
+        this.cargando = false;
+      }
+    });
+  }
+
+  // Método para manejar el cierre de sesión
+  cerrarSesion(): void {
+    this.usuarioService.logout();
+    this.router.navigate(['/']);
+  }
+
+  // Método para manejar la acción de guardar paciente
+  guardar(): void {
+  if (this.TuteladosForm.invalid) {
+    return;
+  }
+
+  const pacienteDetalles: Paciente = this.crearPaciente();  // Creamos el objeto paciente
+
+  // Si estamos en modo de edición, llamamos al método de actualización
+  if (this.tuteladoEditar) {
+    // Llamar al método de actualización de paciente
+    this.pacienteService.actualizarPaciente(pacienteDetalles.dni, pacienteDetalles).subscribe({
+      next: (response) => {
+        this.mensaje = { tipo: 'exito', texto: 'Paciente actualizado correctamente.' };
+        this.cerrarFormulario();  // Cerrar el formulario después de la actualización
+        this.obtenerPacientes();  // Recargar la lista de pacientes
+      },
+      error: (error) => {
+        console.error('Error al actualizar el paciente:', error);
+        this.mensaje = { tipo: 'error', texto: 'Error al actualizar el paciente. Intente nuevamente.' };
+      }
+    });
+  } else {
+    // Si estamos en modo de creación, llamamos al método de registro
+    this.pacienteService.registrarPaciente(pacienteDetalles).subscribe({
+      next: (response) => {
+        this.mensaje = { tipo: 'exito', texto: 'Paciente registrado correctamente.' };
+        this.cerrarFormulario();  // Cerrar el formulario después de la creación
+        this.obtenerPacientes();  // Recargar la lista de pacientes
+        this.router.navigate(['/tutelados']);
+      },
+      error: (error) => {
+        console.error('Error al registrar paciente:', error);
+        this.mensaje = { tipo: 'error', texto: 'Error al registrar el paciente. Intente nuevamente.' };
+      }
+    });
+  }
+}
+
+  // Método para crear el objeto paciente
+  crearPaciente(): PacienteRegistro {
+
+  return {
+    nombre: this.TuteladosForm.value.name,
+    apellido: this.TuteladosForm.value.lastname,
+    fechaNacimiento: this.TuteladosForm.value.fechaNacimiento,
+    sexo: this.TuteladosForm.value.Sexo === 'M' ? 0 : 1,  // Enviar el valor convertido
+    dni: this.TuteladosForm.value.dni,
+    direccion: this.TuteladosForm.value.direccion,
+    telefono: this.TuteladosForm.value.telefono,
+    escuela: this.TuteladosForm.value.escuela,
+    gradoEscolar: this.TuteladosForm.value.grado,
+    tutor: { idUsuario: this.IdEncargado }
+  };
+}
+
+editar(nino: Paciente): void {
+  this.tuteladoEditar = nino;  // Guardamos el paciente a editar
+  this.TuteladosForm.patchValue({
+    name: nino.nombre,
+    lastname: nino.apellido,
+    dni: nino.dni,
+    fechaNacimiento: nino.fechaNacimiento,
+    Sexo: nino.sexo === 0 ? 'M' : 'F',
+    direccion: nino.direccion,
+    telefono: nino.telefono,
+    escuela: nino.escuela,
+    grado: nino.gradoEscolar
+  });
+  this.mostrarFormularioRegistro = true;  // Mostrar el formulario de edición
+}
+
+
+  toggleSidebar(): void {
+    this.isCollapsed = !this.isCollapsed;
+  }
+
+  mostrarFormulario(): void {
+    this.mostrarFormularioRegistro = true;
+    this.TuteladosForm.reset();
+  }
+
+  // Método para cerrar el formulario de registro
+  cerrarFormulario(): void {
+    this.mostrarFormularioRegistro = false;
+    this.TuteladosForm.reset();
+  }
+}

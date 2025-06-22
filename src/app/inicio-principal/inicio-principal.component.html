@@ -35,7 +35,7 @@
       </li>
 
       <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
-        <a routerLink="/pacientes" routerLinkActive="active" class="nav-link">
+        <a routerLink="/tutelados" routerLinkActive="active" class="nav-link">
           <i class="fa-solid fa-clipboard-user me-2"></i>
           <span class="link-text">Pacientes</span>
         </a>
@@ -43,7 +43,7 @@
       
       <!-- Solo para tutor barra de navegación -->
       <li *ngIf="rolUsuario === 'ROLE_TUTOR'">
-        <a routerLink="/pacientes" routerLinkActive="active" class="nav-link">
+        <a routerLink="/tutelados" routerLinkActive="active" class="nav-link">
           <i class="fa-solid fa-clipboard-user me-2"></i>
           <span class="link-text">Niños a mi cargo</span>
         </a>
@@ -83,7 +83,7 @@
       </div>
       <h2 class="mt-4">Niños a mi cargo</h2>
       <div class="btn-group-vertical ordenes-group">
-        <button class="btn orden w-100 d-flex align-items-center px-4" (click)="irRecetas()">
+        <button class="btn orden w-100 d-flex align-items-center px-4" (click)="irTutelados()">
           <i class="fa-solid fa-hands-holding-child me-2"></i> Tutelados
         </button>
       </div>
@@ -110,6 +110,12 @@
       <div class="btn-group-vertical citas-group">
         <button class="btn terapeuta w-100 d-flex align-items-center px-4" (click)="irCitasGeneradas()">
           <i class="fa-solid fa-user-doctor me-2"></i> Registro de Terapeutas
+        </button>
+      </div>
+      <h2 class="mt-4">Pacientes</h2>
+      <div class="btn-group-vertical ordenes-group">
+        <button class="btn orden w-100 d-flex align-items-center px-4" (click)="irTutelados()">
+          <i class="fa-solid fa-hands-holding-child me-2"></i> Tutelados
         </button>
       </div>
     </ng-container>

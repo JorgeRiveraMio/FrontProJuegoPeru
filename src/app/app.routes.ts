@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     {
     path: '',
-    loadComponent: () => import('./inicio/inicio.component').then(m => m.InicioComponent)
+    loadComponent: () => import('./landing_pagee/inicio/inicio.component').then(m => m.InicioComponent)
     },
     {
     path: 'login',
@@ -24,5 +24,9 @@ export const routes: Routes = [
     {
         path: 'terapeuta',
         loadComponent: () => import('./terapeuta/terapeuta.component').then(m => m.TerapeutaComponent)
+    },
+    {
+        path: 'tutelados',
+        loadComponent: () => import('./tutelados/tutelados.component').then(m => m.TuteladosComponent)
     }
 ];

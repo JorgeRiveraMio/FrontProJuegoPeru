@@ -1,0 +1,151 @@
+.sidebar {
+    width: 220px;
+    min-height: 100vh;
+    background-color: #0071ba;
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+  }
+
+.sidebar-header {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-header {
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  overflow: hidden;
+}
+
+.welcome-text {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.username {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+  .sidebar.collapsed {
+    width: 60px;
+  }
+  
+  .main-content {
+    margin-left: 220px;
+    background-color: #e6e6e6;
+    padding: 2rem;
+    width: calc(100% - 220px);
+    transition: margin-left 0.3s ease, width 0.3s ease;
+  }
+
+  .sidebar.collapsed + .main-content {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+  }
+  
+  .toggle-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    margin: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .nav {
+    padding-left: 0;
+    margin-top: 20px;
+    list-style: none;
+  }
+  
+  .nav li {
+    padding: 10px 0;
+    text-align: left;
+  }
+  
+  .nav-link {
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+  
+  .nav-link:hover,
+  .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-link i {
+    font-size: 18px;
+    margin-right: 10px;
+    min-width: 20px;
+    text-align: center;
+  }
+  
+  .sidebar.collapsed .nav-link {
+    justify-content: center;
+    padding: 12px 0;
+  }
+  
+  .sidebar.collapsed .nav-link i {
+    margin: 0;
+  }
+  
+  .sidebar.collapsed .link-text {
+    display: none;
+  }
+
+  @media (max-width: 767.98px) {
+    .sidebar {
+      position: relative;
+      width: 100%;
+      height: auto;
+    }
+    
+    .main-content {
+      margin-left: 0;
+      width: 100%;
+    }
+
+  }
+
+  .perfil-card {
+    background-color: #fcfcfc;
+    max-width: 800px;
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.2);
+  }
+
+  .alert {
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}

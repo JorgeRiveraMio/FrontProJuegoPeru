@@ -1,0 +1,171 @@
+<div class="d-flex flex-column flex-md-row">
+<div [class.collapsed]="isCollapsed" class="sidebar">
+    <button class="toggle-btn" (click)="toggleSidebar()">☰</button>
+    <div class="sidebar-header p-3 border-bottom">
+      <p class="welcome-text mb-0">Bienvenido(a),</p>
+      <h5 class="username">{{ nombreUsuario }}</h5>
+    </div>
+    <ul class="nav flex-column">
+      <li>
+        <a routerLink="/inicio-principal" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-house me-2"></i>
+          <span class="link-text">Inicio</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/edit-perfil" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-user me-2"></i>
+          <span class="link-text">Perfil</span>
+        </a>
+      </li>
+
+      <!-- Solo para ADMIN barra de navegación -->
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/terapeuta" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-user-doctor me-2"></i>
+          <span class="link-text">Terapeuta</span>
+        </a>
+      </li>
+
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/tutores" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-user-tie me-2"></i>
+          <span class="link-text">Tutor</span>
+        </a>
+      </li>
+
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/pacientes" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-clipboard-user me-2"></i>
+          <span class="link-text">Pacientes</span>
+        </a>
+      </li>
+      
+      <!-- Solo para tutor barra de navegación -->
+      <li *ngIf="rolUsuario === 'ROLE_TUTOR'">
+        <a routerLink="/tutelados" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-clipboard-user me-2"></i>
+          <span class="link-text">Niños a mi cargo</span>
+        </a>
+      </li>
+
+      <li>
+        <a (click)="cerrarSesion()" class="nav-link" style="cursor: pointer;">
+          <i class="fa-solid fa-right-from-bracket me-2"></i>
+          <span class="link-text">Cerrar sesión</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="main-content d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="perfil-card p-4 shadow-sm rounded-4">
+      <h3 class="mb-4 text-primary text-center">Mi niño a cargo</h3>
+        
+      <div *ngIf="mensaje" [ngClass]="{'alert-success': mensaje.tipo === 'exito', 'alert-danger': mensaje.tipo === 'error'}" class="alert">
+        {{ mensaje.texto }}
+      </div>
+
+      <div *ngIf="cargando">Cargando perfil de los tutelados...</div>
+      
+      <button *ngIf="!mostrarFormularioRegistro" class="btn btn-primary" (click)="mostrarFormulario()">Nuevo Niño</button>
+
+      <form *ngIf="mostrarFormularioRegistro" [formGroup]="TuteladosForm" (ngSubmit)="guardar()">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" formControlName="name">
+            <div *ngIf="TuteladosForm.get('name')?.invalid && TuteladosForm.get('name')?.touched" class="text-danger">
+                El nombre es obligatorio.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Apellido</label>
+            <input type="text" class="form-control" formControlName="lastname">
+            <div *ngIf="TuteladosForm.get('lastname')?.invalid && TuteladosForm.get('lastname')?.touched" class="text-danger">
+                El apellido es obligatorio.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">DNI</label>
+            <input type="text" class="form-control" formControlName="dni">
+            <div *ngIf="TuteladosForm.get('dni')?.invalid && TuteladosForm.get('dni')?.touched" class="text-danger">
+                El DNI es obligatorio y debe tener 8 dígitos.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Fecha de Nacimiento</label>
+            <input type="date" class="form-control" formControlName="fechaNacimiento">
+            <div *ngIf="TuteladosForm.get('fechaNacimiento')?.invalid && TuteladosForm.get('fechaNacimiento')?.touched" class="text-danger">
+                La fecha de nacimiento es obligatoria.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Sexo</label>
+            <select class="form-control" formControlName="Sexo" required>
+                <option value="M">Masculino</option>
+                <option value="F">Femenimo</option>
+            </select>
+            <div *ngIf="TuteladosForm.get('Sexo')?.invalid && TuteladosForm.get('Sexo')?.touched" class="text-danger">
+                El sexo es obligatorio.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Direccion</label>
+            <input type="text" class="form-control" formControlName="direccion">
+            <div *ngIf="TuteladosForm.get('direccion')?.invalid && TuteladosForm.get('direccion')?.touched" class="text-danger">
+                La dirección es obligatoria.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Telefono</label>
+            <input type="text" class="form-control" formControlName="telefono">
+            <div *ngIf="TuteladosForm.get('telefono')?.invalid && TuteladosForm.get('telefono')?.touched" class="text-danger">
+                El telefono es obligatoria.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Escuela</label>
+            <input type="text" class="form-control" formControlName="escuela">
+            <div *ngIf="TuteladosForm.get('escuela')?.invalid && TuteladosForm.get('escuela')?.touched" class="text-danger">
+                La escuela es obligatoria.
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Grado Escolar</label>
+            <input type="text" class="form-control" formControlName="grado">
+            <div *ngIf="TuteladosForm.get('grado')?.invalid && TuteladosForm.get('grado')?.touched" class="text-danger">
+                El grado escolar es obligatorio.
+            </div>
+          </div>
+        </div>
+        <div class="text-end">
+          <button type="submit" class="btn btn-primary px-4" [disabled]="TuteladosForm.invalid">Guardar</button>
+          <button type="button" class="btn btn-secondary" (click)="cerrarFormulario()">Cancelar</button>
+        </div>
+      </form>
+
+      <table *ngIf="!cargando && tutelados.length > 0" class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>DNI</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let nino of tutelados">
+            <td>{{ nino.nombre }}</td>
+            <td>{{ nino.apellido }}</td>
+            <td>{{ nino.dni }}</td>
+            <td>
+              <button class="btn btn-warning" (click)="editar(nino)">Editar</button>
+            </td>
+          </tr>
+        </tbody>
+       </table>
+    </div>
+  </div>
+
+</div>
