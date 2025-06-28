@@ -1,5 +1,5 @@
 <div class="d-flex flex-column flex-md-row">
-<div [class.collapsed]="isCollapsed" class="sidebar">
+  <div [class.collapsed]="isCollapsed" class="sidebar">
     <button class="toggle-btn" (click)="toggleSidebar()">☰</button>
     <div class="sidebar-header p-3 border-bottom">
       <p class="welcome-text mb-0">Bienvenido(a),</p>
@@ -65,51 +65,53 @@
     </ul>
   </div>
 
-  <div class="main-content d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="perfil-card p-4 shadow-sm rounded-4">
-      <h3 class="mb-4 text-primary text-center">Mi Perfil</h3>
-  
-      <div *ngIf="cargando">Cargando perfil...</div>
-  
-      <form *ngIf="!cargando" [formGroup]="perfilForm" (ngSubmit)="guardar()">
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" class="form-control" formControlName="name">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Apellido</label>
-            <input type="text" class="form-control" formControlName="lastname">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">DNI</label>
-            <input type="text" class="form-control" formControlName="dni">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Usuario</label>
-            <input type="text" class="form-control" formControlName="username">
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Contraseña</label>
-            <input type="password" class="form-control" formControlName="password">
-          </div>
-          <div class="col-md-6 mb-3" *ngIf="rolUsuario === 'ROLE_ADMIN'">
-            <label class="form-label">Especialidad</label>
-            <input type="text" class="form-control" formControlName="especialidad" readonly>
-          </div>
-          <div class="col-md-6 mb-3" *ngIf="rolUsuario === 'ROLE_TUTOR'">
-            <label class="form-label">Teléfono</label>
-            <input type="text" class="form-control" formControlName="telefono">
-          </div>
-          <div class="col-12 mb-3" *ngIf="rolUsuario === 'ROLE_TUTOR'">
-            <label class="form-label">Dirección</label>
-            <input type="text" class="form-control" formControlName="direccion">
-          </div>
-        </div>
-        <div class="text-end">
-          <button type="submit" class="btn btn-primary px-4" [disabled]="perfilForm.invalid">Guardar</button>
-        </div>
-      </form>
-    </div>
+  <div class="main-content mt-4">
+    
+    <div class="container mt-4">
+  <h3 class="mb-3 text-center text-primary">Disponibilidad Semanal de Terapeutas</h3>
+
+  <div class="table-responsive">
+    <table class="table table-bordered text-center align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Nombre</th>
+          <th>Especialidad</th>
+          <th>Estado</th>
+          <th *ngFor="let dia of diasSemana">{{ dia }}</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let terapeuta of terapeutas">
+        <tr>
+          <td>{{ terapeuta.name }} {{ terapeuta.lastname }}</td>
+          <td>{{ terapeuta.especialidad }} </td>    
+        <td>
+            <span class="badge" 
+                    [ngClass]="terapeuta.estadoEmpleado === 0 ? 'bg-success' : 'bg-secondary'">
+                {{ terapeuta.estadoEmpleado === 0 ? 'Activo' : 'Inactivo' }}
+            </span>
+        </td>
+        <td *ngFor="let dia of diasSemana">-</td>
+            <td>
+                <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-success btn-sm" (click)="abrirModalCrear(terapeuta)">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                    <button class="btn btn-warning btn-sm" (click)="abrirModalEditar(terapeuta)">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" (click)="eliminarDisponibilidad(terapeuta)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+
   </div>
 </div>

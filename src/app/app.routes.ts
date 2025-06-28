@@ -28,5 +28,9 @@ export const routes: Routes = [
     {
         path: 'tutelados',
         loadComponent: () => import('./tutelados/tutelados.component').then(m => m.TuteladosComponent)
+    },
+    {
+        path: 'disponibilidad',
+        loadComponent: () => import('./disponibilidad/disponibilidad.component').then(m => m.DisponibilidadComponent)
     }
 ];

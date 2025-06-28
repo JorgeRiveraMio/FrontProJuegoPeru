@@ -189,24 +189,33 @@ export class TuteladosComponent implements OnInit {
 }
 
   // Método para crear el objeto paciente
-  crearPaciente(): PacienteRegistro {
+ crearPaciente(): PacienteRegistro {
+  // Si estamos editando y es admin, usa el tutor original
+  const tutorId = (this.rolUsuario === 'ROLE_ADMIN' && this.tuteladoEditar)
+    ? this.tuteladoEditar.tutor?.idUsuario
+    : (this.rolUsuario === 'ROLE_ADMIN'
+        ? parseInt(this.TuteladosForm.get('tutor')?.value)
+        : this.IdEncargado);
 
   return {
     nombre: this.TuteladosForm.value.name,
     apellido: this.TuteladosForm.value.lastname,
     fechaNacimiento: this.TuteladosForm.value.fechaNacimiento,
-    sexo: this.TuteladosForm.value.Sexo === 'M' ? 0 : 1,  // Enviar el valor convertido
+    sexo: this.TuteladosForm.value.Sexo === 'M' ? 0 : 1,
     dni: this.TuteladosForm.value.dni,
     direccion: this.TuteladosForm.value.direccion,
     telefono: this.TuteladosForm.value.telefono,
     escuela: this.TuteladosForm.value.escuela,
     gradoEscolar: this.TuteladosForm.value.grado,
-    tutor: { idUsuario: this.IdEncargado }
+    tutor: {
+      idUsuario: tutorId
+    }
   };
 }
 
 editar(nino: Paciente): void {
-  this.tuteladoEditar = nino;  // Guardamos el paciente a editar
+  this.tuteladoEditar = nino;
+
   this.TuteladosForm.patchValue({
     name: nino.nombre,
     lastname: nino.apellido,
@@ -216,9 +225,16 @@ editar(nino: Paciente): void {
     direccion: nino.direccion,
     telefono: nino.telefono,
     escuela: nino.escuela,
-    grado: nino.gradoEscolar
+    grado: nino.gradoEscolar,
+    tutor: nino.tutor?.idUsuario || ''  // Carga el tutor en el formulario
   });
-  this.mostrarFormularioRegistro = true;  // Mostrar el formulario de edición
+
+  // Si el usuario es admin, deshabilita el campo tutor solo en edición
+  if (this.rolUsuario === 'ROLE_ADMIN') {
+    this.TuteladosForm.get('tutor')?.disable();
+  }
+
+  this.mostrarFormularioRegistro = true;
 }
 
 
@@ -227,10 +243,14 @@ editar(nino: Paciente): void {
   }
 
   mostrarFormulario(): void {
-    this.mostrarFormularioRegistro = true;
-    this.TuteladosForm.reset();
-  }
+  this.mostrarFormularioRegistro = true;
+  this.tuteladoEditar = null;
+  this.TuteladosForm.reset();
 
+  if (this.rolUsuario === 'ROLE_ADMIN') {
+    this.TuteladosForm.get('tutor')?.enable();
+  }
+}
   // Método para cerrar el formulario de registro
   cerrarFormulario(): void {
     this.mostrarFormularioRegistro = false;
