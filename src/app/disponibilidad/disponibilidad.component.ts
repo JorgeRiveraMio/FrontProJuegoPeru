@@ -200,4 +200,31 @@ obtenerDisponibilidadPorDia(idUsuario: number, dia: string): string {
     .join(' | ');
 }
 
+editarFranja(disp: TerapeutaDisponibilidad): void {
+  this.modoEdicion = true;
+  this.disponibilidadSeleccionada = {
+    id: disp.id,
+    empleadoId: disp.empleado?.idUsuario || 0,
+    diaSemana: disp.diaSemana,
+    horaInicio: disp.horaInicio,
+    horaFin: disp.horaFin
+  };
+  this.modalAbierto = true;
+}
+
+eliminarFranja(id: number): void {
+  if (confirm('¿Deseas eliminar esta franja de disponibilidad?')) {
+    this.terapeutaService.eliminarDisponibilidad(id).subscribe(() => {
+      alert('Franja eliminada.');
+      this.cargarTerapeutas();
+    });
+  }
+}
+
+obtenerDisponibilidadesPorDia(idUsuario: number, dia: string): TerapeutaDisponibilidad[] {
+  return this.disponibilidades.filter(d =>
+    d.empleado?.idUsuario === idUsuario && d.diaSemana === dia
+  );
+}
+
 }

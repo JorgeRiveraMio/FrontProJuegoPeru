@@ -93,18 +93,22 @@
             </span>
         </td>
         <td *ngFor="let dia of diasSemana">
-            {{ obtenerDisponibilidadPorDia(terapeuta.idUsuario, dia) }}
+          <div *ngFor="let disp of obtenerDisponibilidadesPorDia(terapeuta.idUsuario, dia)" class="d-flex justify-content-between align-items-center mb-1">
+            <span>{{ disp.horaInicio.slice(0,5) }} - {{ disp.horaFin.slice(0,5) }}</span>
+            <div class="btn-group ms-2">
+              <button class="btn btn-warning btn-sm" (click)="editarFranja(disp)">
+                <i class="fa fa-edit"></i>
+              </button>
+              <button class="btn btn-danger btn-sm" (click)="eliminarFranja(disp.id!)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </div>
         </td>
             <td>
                 <div class="d-flex justify-content-center gap-2">
                     <button class="btn btn-success btn-sm" (click)="abrirModalCrear(terapeuta)">
                         <i class="fa fa-plus"></i>
-                    </button>
-                    <button class="btn btn-warning btn-sm" (click)="abrirModalEditar(terapeuta)">
-                        <i class="fa fa-edit"></i>
-                    </button>
-                    <button class="btn btn-danger btn-sm" (click)="eliminarDisponibilidad(terapeuta)">
-                        <i class="fa fa-trash"></i>
                     </button>
                 </div>
             </td>
