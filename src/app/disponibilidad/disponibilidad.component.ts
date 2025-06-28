@@ -5,10 +5,13 @@ import { CommonModule } from '@angular/common';
 import { UsuarioActual } from '../../Modelos/Entity/UsuarioActual';
 import { Empleado } from '../../Modelos/Entity/Empleado';
 import { EstadoEmpleado } from '../../Modelos/Enums/EstadoEmpleado';
+import { TerapeutaService } from '../../Servicios/Service/terapeuta.service';
+import { TerapeutaDisponibilidad } from '../../Modelos/Entity/TerapeutaDisponibilidad';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-disponibilidad',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './disponibilidad.component.html',
   styleUrl: './disponibilidad.component.css'
 })
@@ -21,9 +24,13 @@ export class DisponibilidadComponent implements OnInit {
   nombreUsuario: string = '';
   rolUsuario: string = '';
   IdEncargado: number = 0;
+  modalAbierto = false;
+  modoEdicion = false;
+  disponibilidades: TerapeutaDisponibilidad[] = [];
 
   constructor(private usuarioService: UsuarioService,
-    private router: Router
+    private router: Router,
+    private terapeutaService: TerapeutaService
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +47,16 @@ export class DisponibilidadComponent implements OnInit {
           ? EstadoEmpleado.ACTIVO
           : EstadoEmpleado.INACTIVO
       })) as Empleado[];
+
+      // Cargar disponibilidades después de los terapeutas
+      this.terapeutaService.listarTodas().subscribe({
+        next: (disponibilidades: TerapeutaDisponibilidad[]) => {
+          this.disponibilidades = disponibilidades;
+        },
+        error: (err) => {
+          console.error('Error al cargar disponibilidades:', err);
+        }
+      });
     },
     error: (err) => {
       console.error('Error al cargar terapeutas:', err);
@@ -90,21 +107,97 @@ export class DisponibilidadComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  abrirModalCrear(terapeuta: Empleado): void {
-  console.log('Crear nueva hora para', terapeuta);
-  // Aquí abrirás un modal o activas un formulario específico
+  disponibilidadSeleccionada: TerapeutaDisponibilidad = {
+  empleadoId: 0,
+  diaSemana: '',
+  horaInicio: '',
+  horaFin: ''
+};
+
+abrirModalCrear(terapeuta: Empleado): void {
+  this.modoEdicion = false;
+  this.disponibilidadSeleccionada = {
+    empleadoId: terapeuta.idUsuario,
+    diaSemana: '',
+    horaInicio: '',
+    horaFin: ''
+  };
+  this.modalAbierto = true;
 }
 
 abrirModalEditar(terapeuta: Empleado): void {
-  console.log('Editar disponibilidad de', terapeuta);
-  // Aquí puedes abrir un modal de edición con los datos cargados
+  this.modoEdicion = true;
+  this.disponibilidadSeleccionada = {
+    empleadoId: terapeuta.idUsuario,
+    diaSemana: 'Lunes', // puedes cargar datos reales si los tienes
+    horaInicio: '08:00',
+    horaFin: '10:00'
+  };
+  this.modalAbierto = true;
+}
+
+cerrarModal(): void {
+  this.modalAbierto = false;
+}
+
+guardarOActualizarDisponibilidad() {
+  if (this.modoEdicion && this.disponibilidadSeleccionada.id) {
+    this.terapeutaService.actualizarDisponibilidad(this.disponibilidadSeleccionada.id, this.disponibilidadSeleccionada)
+      .subscribe(() => {
+        alert('Actualizado');
+        this.cargarTerapeutas();
+        this.modalAbierto = false;
+      });
+  } else {
+    this.terapeutaService.guardarDisponibilidad(this.disponibilidadSeleccionada)
+  .subscribe({
+    next: (mensaje: string) => {
+      console.log(mensaje); // 'Se guardó correctamente la disponibilidad'
+      alert(mensaje);
+      this.cargarTerapeutas();
+      this.modalAbierto = false;
+    },
+    error: (err) => {
+      console.error('Error al guardar disponibilidad:', err);
+      alert('Error al guardar disponibilidad');
+    }
+  });
+  }
 }
 
 eliminarDisponibilidad(terapeuta: Empleado): void {
-  if (confirm(`¿Deseas eliminar toda la disponibilidad de ${terapeuta.name}?`)) {
-    // Aquí va la llamada al servicio para eliminar
-    console.log('Eliminando disponibilidad de', terapeuta);
+  if (confirm(`¿Deseas eliminar la disponibilidad de ${terapeuta.name}?`)) {
+    this.terapeutaService.obtenerPorEmpleado(terapeuta.idUsuario).subscribe(disponibilidades => {
+      if (disponibilidades.length > 0) {
+        const id = disponibilidades[0].id;
+        if (id !== undefined) {
+          this.terapeutaService.eliminarDisponibilidad(id).subscribe(() => {
+            alert('Eliminado');
+            this.cargarTerapeutas();
+          });
+        } else {
+          alert('No se pudo obtener el ID de la disponibilidad.');
+        }
+      } else {
+        alert('No tiene disponibilidad registrada.');
+      }
+    });
   }
+}
+
+obtenerDisponibilidadPorDia(idUsuario: number, dia: string): string {
+  const disponibilidadesDia = this.disponibilidades.filter(d =>
+    d.empleado?.idUsuario === idUsuario && d.diaSemana === dia
+  );
+
+  if (disponibilidadesDia.length === 0) {
+    return '-';
+  }
+
+  // Ejemplo: "08:00 - 10:00 | 14:00 - 16:00"
+  return disponibilidadesDia
+    .map(d => `${d.horaInicio.slice(0, 5)} - ${d.horaFin.slice(0, 5)}`)
+    .join(' | ');
 }
 
 }

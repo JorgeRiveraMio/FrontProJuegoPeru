@@ -92,7 +92,9 @@
                 {{ terapeuta.estadoEmpleado === 0 ? 'Activo' : 'Inactivo' }}
             </span>
         </td>
-        <td *ngFor="let dia of diasSemana">-</td>
+        <td *ngFor="let dia of diasSemana">
+            {{ obtenerDisponibilidadPorDia(terapeuta.idUsuario, dia) }}
+        </td>
             <td>
                 <div class="d-flex justify-content-center gap-2">
                     <button class="btn btn-success btn-sm" (click)="abrirModalCrear(terapeuta)">
@@ -111,6 +113,43 @@
       </tbody>
     </table>
   </div>
+    <div *ngIf="modalAbierto" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">
+            {{ modoEdicion ? 'Editar Disponibilidad' : 'Nueva Disponibilidad' }}
+            </h5>
+            <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+        </div>
+        <div class="modal-body">
+            <form (ngSubmit)="guardarOActualizarDisponibilidad()">
+            <div class="mb-3">
+                <label>Día de la Semana</label>
+                <select [(ngModel)]="disponibilidadSeleccionada.diaSemana" name="diaSemana" class="form-select" required>
+                <option *ngFor="let dia of diasSemana" [value]="dia">{{ dia }}</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label>Hora de Inicio</label>
+                <input [(ngModel)]="disponibilidadSeleccionada.horaInicio" name="horaInicio" type="time" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label>Hora de Fin</label>
+                <input [(ngModel)]="disponibilidadSeleccionada.horaFin" name="horaFin" type="time" class="form-control" required>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">
+                {{ modoEdicion ? 'Actualizar' : 'Registrar' }}
+                </button>
+                <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+            </div>
+            </form>
+        </div>
+        </div>
+    </div>
+    </div>
+
 </div>
 
   </div>

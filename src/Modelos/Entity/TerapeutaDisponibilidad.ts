@@ -1,9 +1,10 @@
 import { Empleado } from "./Empleado";
 
 export interface TerapeutaDisponibilidad {
-    empleadoId: Empleado;
+    id?: number;
+    empleadoId?: number;
+    empleado?: Empleado;
     diaSemana: string;
     horaInicio: string;
     horaFin: string;
 }
-export type TerapeutaDisponibilidadReg = Omit<TerapeutaDisponibilidad, 'idTerapeutaDisponibilidad'>;
