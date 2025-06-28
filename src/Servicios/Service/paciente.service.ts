@@ -53,4 +53,15 @@ export class PacienteService {
     };
     return this.http.put<Paciente>(`${this._apiUrl}/actualizar/${dni}`, pacienteDetalles, { headers });
   }
+
+  obtenerTodosLosPacientes(): Observable<Paciente[]> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('No se encontró token de autenticación.');
+    }
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+  return this.http.get<Paciente[]>(this._apiUrl+'/admin/pacientes', {headers});  // Asegúrate de que la URL esté correcta
+  }
 }

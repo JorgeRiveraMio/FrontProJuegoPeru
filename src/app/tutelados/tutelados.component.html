@@ -60,7 +60,14 @@
 
   <div class="main-content d-flex justify-content-center align-items-center" style="min-height: 100vh;">
     <div class="perfil-card p-4 shadow-sm rounded-4">
-      <h3 class="mb-4 text-primary text-center">Mi niño a cargo</h3>
+
+      <div *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <h3 class="mb-4 text-primary text-center">Pacientes</h3>
+      </div>
+
+      <div *ngIf="rolUsuario === 'ROLE_TUTOR'">
+        <h3 class="mb-4 text-primary text-center">Mi niño a cargo</h3>
+      </div>
         
       <div *ngIf="mensaje" [ngClass]="{'alert-success': mensaje.tipo === 'exito', 'alert-danger': mensaje.tipo === 'error'}" class="alert">
         {{ mensaje.texto }}
@@ -104,7 +111,7 @@
             <label>Sexo</label>
             <select class="form-control" formControlName="Sexo" required>
                 <option value="M">Masculino</option>
-                <option value="F">Femenimo</option>
+                <option value="F">Femenino</option>
             </select>
             <div *ngIf="TuteladosForm.get('Sexo')?.invalid && TuteladosForm.get('Sexo')?.touched" class="text-danger">
                 El sexo es obligatorio.
@@ -138,10 +145,22 @@
                 El grado escolar es obligatorio.
             </div>
           </div>
+          <div *ngIf="rolUsuario === 'ROLE_ADMIN'">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Seleccionar Tutor</label>
+              <select class="form-control" formControlName="tutor" [disabled]="!!tuteladoEditar" required>
+                <option value="" disabled selected>{{ tuteladoEditar ? (tuteladoEditar.tutor.name + " " + tuteladoEditar.tutor.lastname) : 'Seleccione un tutor' }}</option>
+                <option *ngFor="let tutor of tutores" [value]="tutor.idUsuario">{{ tutor.name + " "+tutor.lastname}}</option>
+              </select>
+              <div *ngIf="TuteladosForm.get('tutor')?.invalid && TuteladosForm.get('tutor')?.touched" class="text-danger">
+                El tutor es obligatorio.
+              </div>
+            </div>
+          </div>
         </div>
         <div class="text-end">
-          <button type="submit" class="btn btn-primary px-4" [disabled]="TuteladosForm.invalid">Guardar</button>
-          <button type="button" class="btn btn-secondary" (click)="cerrarFormulario()">Cancelar</button>
+          <button type="submit" class="btn btn-primary guardar px-4" [disabled]="TuteladosForm.invalid">Guardar</button>
+          <button type="button" class="btn btn-secondary cancelar" (click)="cerrarFormulario()">Cancelar</button>
         </div>
       </form>
 
@@ -151,6 +170,8 @@
             <th>Nombre</th>
             <th>Apellido</th>
             <th>DNI</th>
+            <th>Fecha de Nacimiento</th>
+            <th *ngIf="rolUsuario === 'ROLE_ADMIN'">Tutor</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -159,6 +180,8 @@
             <td>{{ nino.nombre }}</td>
             <td>{{ nino.apellido }}</td>
             <td>{{ nino.dni }}</td>
+            <td>{{ nino.fechaNacimiento }}</td>
+             <td *ngIf="rolUsuario === 'ROLE_ADMIN'">{{ nino.tutor.name }} {{ nino.tutor.lastname }}</td>
             <td>
               <button class="btn btn-warning" (click)="editar(nino)">Editar</button>
             </td>

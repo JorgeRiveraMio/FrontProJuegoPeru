@@ -149,3 +149,11 @@
   background-color: #f8d7da;
   color: #721c24;
 }
+
+.guardar{
+  margin-right: 10px;
+  border-radius: 8px;
+}
+.cancelar{
+  border-radius: 8px;
+}

@@ -9,7 +9,7 @@ export interface Paciente {
     telefono: string;
     escuela: string;
     gradoEscolar: string;
-    tutor: { idUsuario: number };
+    tutor: { idUsuario: number, name?: string, lastname?: string };
 }
 
 export type PacienteRegistro = Omit<Paciente, 'idPaciente'>;

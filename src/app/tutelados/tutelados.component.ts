@@ -22,12 +22,14 @@ export class TuteladosComponent implements OnInit {
   cargando = true;
   mensaje: { tipo: string, texto: string } | null = null;
   tutelados: Paciente[] = [];
+  tutores: any[] = [];
   mostrarFormularioRegistro: boolean = false;
   tuteladoEditar: Paciente | null = null;
   constructor(
     private router: Router,
     private usuarioService: UsuarioService,
     private pacienteService: PacienteService,
+    private tutorService: UsuarioService,
     private fb: FormBuilder
   ) {}
 
@@ -43,10 +45,12 @@ export class TuteladosComponent implements OnInit {
       next: (usuario: UsuarioActual) => {
         this.nombreUsuario = usuario.name || usuario.username || 'Usuario';
         this.rolUsuario = this.obtenerRolUsuario(usuario.idRol);
-        this.IdEncargado = usuario.idUsuario;
-       console.log('ID del tutor:', this.IdEncargado); 
+        this.IdEncargado = usuario.idUsuario;       
        this.obtenerPacientes();
-      },
+       if (this.rolUsuario === 'ROLE_ADMIN') {
+        this.obtenerTutores();
+      }
+    },
       error: () => {
         this.nombreUsuario = 'Usuario';
         this.rolUsuario = '';
@@ -67,8 +71,21 @@ export class TuteladosComponent implements OnInit {
     }
   }
 
+  obtenerTutores(): void {
+    this.tutorService.obtenerTutores().subscribe({
+      next: (tutores) => {
+        this.tutores = tutores;  // Almacenar los tutores en la variable 'tutores'
+      },
+      error: (error) => {
+        console.error('Error al obtener los tutores', error);
+      }
+    });
+  }
+
   // Método para inicializar el formulario
   initializeForm(): void {
+  if (this.rolUsuario === 'ROLE_ADMIN') {
+    // Si es Admin, el campo "tutor" será obligatorio
     this.TuteladosForm = this.fb.group({
       name: ['', Validators.required],
       lastname: ['', Validators.required],
@@ -78,12 +95,28 @@ export class TuteladosComponent implements OnInit {
       direccion: ['', Validators.required],
       telefono: ['', Validators.required],
       escuela: ['', Validators.required],
-      grado: ['', Validators.required]
+      grado: ['', Validators.required],
+      tutor: ['', Validators.required]  // El tutor es obligatorio solo para Admin
+    });
+  } else {
+    // Si es Tutor, el campo "tutor" no se incluye en la validación
+    this.TuteladosForm = this.fb.group({
+      name: ['', Validators.required],
+      lastname: ['', Validators.required],
+      dni: ['', [Validators.required, Validators.pattern('\\d{8}')]],
+      fechaNacimiento: ['', Validators.required],
+      Sexo: ['', Validators.required],
+      direccion: ['', Validators.required],
+      telefono: ['', Validators.required],
+      escuela: ['', Validators.required],
+      grado: ['', Validators.required],
+      tutor: ['']  // El campo tutor no es obligatorio para el Tutor
     });
   }
+}
 
   obtenerPacientes(): void {
-    console.log('ID del tutor en obtenerPacientes:', this.IdEncargado);
+  if (this.rolUsuario === 'ROLE_TUTOR') {
     this.pacienteService.obtenerPacientesPorTutor(this.IdEncargado).subscribe({
       next: (pacientes) => {
         this.tutelados = pacientes;  // Almacenar los pacientes en la variable 'tutelados'
@@ -94,7 +127,21 @@ export class TuteladosComponent implements OnInit {
         this.cargando = false;
       }
     });
+  } else if (this.rolUsuario === 'ROLE_ADMIN') {
+    // Si el usuario es un administrador, mostrar todos los pacientes
+    this.pacienteService.obtenerTodosLosPacientes().subscribe({
+      next: (pacientes) => {
+        this.tutelados = pacientes;  // Almacenar todos los pacientes
+        console.log(pacientes);
+        this.cargando = false;  // Detener la carga
+      },
+      error: (error) => {
+        console.error('Error al obtener todos los pacientes', error);
+        this.cargando = false;
+      }
+    });
   }
+}
 
   // Método para manejar el cierre de sesión
   cerrarSesion(): void {

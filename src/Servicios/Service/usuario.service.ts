@@ -126,4 +126,15 @@ export class UsuarioService {
     };
     return this.http.post(`${appsettingsCliente.apiUrl}/empleado/guardar`, empleadoData, { headers });
   }
+
+  obtenerTutores(): Observable<any[]> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('No se encontró token de autenticación.');
+    }
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+    return this.http.get<any[]>(this._apiUrl + "/tutores", { headers });
+  }
 }
