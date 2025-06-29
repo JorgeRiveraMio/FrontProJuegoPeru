@@ -8,6 +8,7 @@ import { EstadoEmpleado } from '../../Modelos/Enums/EstadoEmpleado';
 import { TerapeutaService } from '../../Servicios/Service/terapeuta.service';
 import { TerapeutaDisponibilidad } from '../../Modelos/Entity/TerapeutaDisponibilidad';
 import { FormsModule } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-disponibilidad',
@@ -30,7 +31,8 @@ export class DisponibilidadComponent implements OnInit {
 
   constructor(private usuarioService: UsuarioService,
     private router: Router,
-    private terapeutaService: TerapeutaService
+    private terapeutaService: TerapeutaService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -144,7 +146,7 @@ guardarOActualizarDisponibilidad() {
   if (this.modoEdicion && this.disponibilidadSeleccionada.id) {
     this.terapeutaService.actualizarDisponibilidad(this.disponibilidadSeleccionada.id, this.disponibilidadSeleccionada)
       .subscribe(() => {
-        alert('Actualizado');
+        this.toastr.info('Disponibilidad actualizada exitosamente.', 'Éxito');
         this.cargarTerapeutas();
         this.modalAbierto = false;
       });
@@ -152,36 +154,15 @@ guardarOActualizarDisponibilidad() {
     this.terapeutaService.guardarDisponibilidad(this.disponibilidadSeleccionada)
   .subscribe({
     next: (mensaje: string) => {
-      console.log(mensaje); // 'Se guardó correctamente la disponibilidad'
-      alert(mensaje);
+      this.toastr.success(mensaje || 'Disponibilidad registrada con éxito.', 'Éxito');
       this.cargarTerapeutas();
       this.modalAbierto = false;
     },
     error: (err) => {
-      console.error('Error al guardar disponibilidad:', err);
+      this.toastr.error('Error al guardar disponibilidad', 'Error');
       alert('Error al guardar disponibilidad');
     }
   });
-  }
-}
-
-eliminarDisponibilidad(terapeuta: Empleado): void {
-  if (confirm(`¿Deseas eliminar la disponibilidad de ${terapeuta.name}?`)) {
-    this.terapeutaService.obtenerPorEmpleado(terapeuta.idUsuario).subscribe(disponibilidades => {
-      if (disponibilidades.length > 0) {
-        const id = disponibilidades[0].id;
-        if (id !== undefined) {
-          this.terapeutaService.eliminarDisponibilidad(id).subscribe(() => {
-            alert('Eliminado');
-            this.cargarTerapeutas();
-          });
-        } else {
-          alert('No se pudo obtener el ID de la disponibilidad.');
-        }
-      } else {
-        alert('No tiene disponibilidad registrada.');
-      }
-    });
   }
 }
 
@@ -215,7 +196,7 @@ editarFranja(disp: TerapeutaDisponibilidad): void {
 eliminarFranja(id: number): void {
   if (confirm('¿Deseas eliminar esta franja de disponibilidad?')) {
     this.terapeutaService.eliminarDisponibilidad(id).subscribe(() => {
-      alert('Franja eliminada.');
+      this.toastr.error('Franja de disponibilidad eliminada.', 'Eliminado');
       this.cargarTerapeutas();
     });
   }
