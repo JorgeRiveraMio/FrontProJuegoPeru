@@ -6,6 +6,7 @@ import { UsuarioActual } from '../../Modelos/Entity/UsuarioActual';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Paciente, PacienteRegistro } from '../../Modelos/Entity/Paciente';
 import { PacienteService } from '../../Servicios/Service/paciente.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-tutelados',
@@ -30,7 +31,8 @@ export class TuteladosComponent implements OnInit {
     private usuarioService: UsuarioService,
     private pacienteService: PacienteService,
     private tutorService: UsuarioService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -162,13 +164,13 @@ export class TuteladosComponent implements OnInit {
     // Llamar al método de actualización de paciente
     this.pacienteService.actualizarPaciente(pacienteDetalles.dni, pacienteDetalles).subscribe({
       next: (response) => {
-        this.mensaje = { tipo: 'exito', texto: 'Paciente actualizado correctamente.' };
+        this.toastr.success('Paciente actualizado correctamente.', 'Éxito');
         this.cerrarFormulario();  // Cerrar el formulario después de la actualización
         this.obtenerPacientes();  // Recargar la lista de pacientes
       },
       error: (error) => {
         console.error('Error al actualizar el paciente:', error);
-        this.mensaje = { tipo: 'error', texto: 'Error al actualizar el paciente. Intente nuevamente.' };
+        this.toastr.error('Error al actualizar el paciente. Intente nuevamente.', 'Error');
       }
     });
   } else {
@@ -188,9 +190,7 @@ export class TuteladosComponent implements OnInit {
   }
 }
 
-  // Método para crear el objeto paciente
  crearPaciente(): PacienteRegistro {
-  // Si estamos editando y es admin, usa el tutor original
   const tutorId = (this.rolUsuario === 'ROLE_ADMIN' && this.tuteladoEditar)
     ? this.tuteladoEditar.tutor?.idUsuario
     : (this.rolUsuario === 'ROLE_ADMIN'
@@ -226,10 +226,9 @@ editar(nino: Paciente): void {
     telefono: nino.telefono,
     escuela: nino.escuela,
     grado: nino.gradoEscolar,
-    tutor: nino.tutor?.idUsuario || ''  // Carga el tutor en el formulario
+    tutor: nino.tutor?.idUsuario || ''
   });
 
-  // Si el usuario es admin, deshabilita el campo tutor solo en edición
   if (this.rolUsuario === 'ROLE_ADMIN') {
     this.TuteladosForm.get('tutor')?.disable();
   }

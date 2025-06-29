@@ -6,6 +6,7 @@ import { UsuarioActual } from '../../Modelos/Entity/UsuarioActual';
 import { EstadoEmpleado } from '../../Modelos/Enums/EstadoEmpleado';
 import { FormsModule } from '@angular/forms';
 import { EmpleadoRegistro } from '../../Modelos/Entity/Empleado';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-terapeuta',
@@ -28,7 +29,8 @@ export class TerapeutaComponent {
 
   constructor(
     private usuarioService: UsuarioService,
-    private router: Router){}
+    private router: Router,
+    private toastr: ToastrService){}
   
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
@@ -73,9 +75,9 @@ cargarTerapeutas(): void {
         t.rol?.id === 3
         
       );
-      console.log('Terapeutas recibidos:', data);
+      
     },
-    error: (err) => console.error('Error al cargar terapeutas:', err)
+    error: (err) => this.toastr.error('Error al cargar terapeutas', 'Error')
   });
 }
 
@@ -104,7 +106,7 @@ guardarNuevoTerapeuta(): void {
 
   if (!this.terapeutaNuevo.name || !this.terapeutaNuevo.lastname || !this.terapeutaNuevo.dni ||
       !this.terapeutaNuevo.username || !this.terapeutaNuevo.password || !this.terapeutaNuevo.especialidad) {
-    alert('Por favor, completa todos los campos obligatorios.');
+        this.toastr.error('Por favor completa todos los campos', 'Error');
     return;
   }
 
@@ -121,13 +123,12 @@ guardarNuevoTerapeuta(): void {
 
   this.usuarioService.registrarTerapeuta(payload).subscribe({
     next: () => {
-      alert('Terapeuta creado correctamente');
+      this.toastr.success('Terapeuta creado correctamente', 'Éxito');
       this.cerrarRegistroNuevo();
       this.cargarTerapeutas();
     },
     error: (err) => {
-      console.error('Error al crear terapeuta:', err);
-      alert('Ocurrió un error al crear el terapeuta');
+      this.toastr.error('Ocurrió un error al crear el terapeuta', 'Error');
     }
   });
 }
@@ -148,14 +149,14 @@ guardar(){
   
   this.usuarioService.actualizarTerapeuta(this.terapeutaEnEdicion.idUsuario, payload).subscribe({
     next: () => {
-      alert('Terapeuta actualizado correctamente');
+      this.toastr.success('Terapeuta actualizado correctamente', 'Éxito');
       this.mostrarFormulario = false;
       this.terapeutaEnEdicion = null;
       this.cargarTerapeutas(); // refresca la lista
     },
     error: (err) => {
-      console.error('Error al actualizar terapeuta:', err);
-      alert('Ocurrió un error al actualizar el terapeuta');
+      
+      this.toastr.error('Ocurrió un error al actualizar el terapeuta', 'Error');
     }
   });
 }
@@ -169,16 +170,14 @@ eliminar(idUsuario: number): void {
   if (confirm('¿Estás seguro de eliminar este terapeuta?')) {
     this.usuarioService.eliminarTerapeuta(idUsuario).subscribe({
       next: (resp) => {
-        console.log('Respuesta al eliminar:', resp);
-        alert('Terapeuta eliminado correctamente');
+        this.toastr.success('Terapeuta eliminado correctamente', 'Éxito');
         this.cargarTerapeutas();
       },
       error: (err) => {
     if (err.status === 200) {
       this.cargarTerapeutas();
     } else {
-      console.error('Error al eliminar terapeuta:', err);
-      alert('Ocurrió un error al eliminar el terapeuta');
+      this.toastr.error('Error al eliminar terapeuta', 'Error');
     }
   }
     });

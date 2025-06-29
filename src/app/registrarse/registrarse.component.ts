@@ -7,6 +7,7 @@ import { UsuarioService } from '../../Servicios/Service/usuario.service';
 import { DniService } from '../../Servicios/Service/dni.service';
 import { TutorRegistro } from '../../Modelos/Entity/Tutor';
 import { EstadoTutor } from '../../Modelos/Enums/EstadoTutor';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class RegistrarseComponent {
     private readonly _router = inject(Router);
     private readonly _usuarioService = inject(UsuarioService);
     private readonly _dniService = inject(DniService);
+    private readonly toastr = inject(ToastrService);
 
     mostrarModal = false;
     usuarioActual: string = '';
@@ -98,16 +100,16 @@ export class RegistrarseComponent {
               });
               } catch (err) {
               console.error('Error al parsear la respuesta', err);
-              console.error('No se pudo obtener la información del DNI.');
+              this.toastr.error('No se pudo obtener la información del DNI.', 'Error');
               }
           },
           error: (err) => {
-              console.error('Error consultando DNI', err);
-              console.error('DNI no encontrado o error en la consulta.');
+              this.toastr.error('Error al consultar el DNI', 'Error');
+              this.toastr.error('DNI no encontrado o error en la consulta', 'Error');
           }
           });
       } else {
-        console.error('DNI inválido');
+        this.toastr.error('DNI inválido', 'Error');
       }
   }
 
@@ -127,14 +129,13 @@ export class RegistrarseComponent {
   
       this._usuarioService.enviarCodigo(tutor).subscribe({
         next: (response) => {
-          console.log('Respuesta del backend:', response);
-          console.info('Código enviado!');
+          this.toastr.success('Código enviado a tu correo', 'Éxito');
           this.abrirModal(tutor.username);
         },
-        error: () => console.error('Error enviando el código')
+        error: () => this.toastr.error('Error al enviar el código', 'Error')
       });
     } else {
-      console.error('Completa todos los campos!');
+      this.toastr.error('Por favor completa todos los campos correctamente', 'Error');
       this.registroForm.markAllAsTouched();
     }
   }
@@ -157,18 +158,16 @@ export class RegistrarseComponent {
   
       this._usuarioService.verificarCodigo(this.usuarioActual ?? '', code ?? '').subscribe({
         next: (response) => {
-          console.log('Código verificado correctamente:', response);
-          alert('Código verificado, cuenta activada!');
+          this.toastr.success('Código verificado correctamente', 'Éxito');
           this.cerrarModal();
           this._router.navigate(['/inicio-principal']);
         },
         error: (err) => {
-          console.error('Error verificando el código:', err);
-          alert('Código incorrecto. Inténtalo nuevamente.');
+          this.toastr.error('Código incorrecto. Inténtalo nuevamente', 'Error');
         }
       });
     } else {
-      console.error('Debes ingresar el código!');
+      this.toastr.error('Debes ingresar el código', 'Error');
       this.validateForm.markAllAsTouched();
     }
   }

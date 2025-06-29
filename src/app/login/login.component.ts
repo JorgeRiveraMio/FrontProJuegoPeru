@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { hasEmailError, isRequired } from '../../Servicios/Validacion';
 import { UsuarioService } from '../../Servicios/Service/usuario.service';
 import { AuthResponse } from '../../Modelos/auth-response';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginComponent {
   private readonly _formBuilder = inject(FormBuilder);
   private readonly _usuarioService = inject(UsuarioService);
   private readonly _router = inject(Router);
+  private readonly toastr = inject(ToastrService);
   mostrarRecuperar = false;
 
   irARecuperar() {
@@ -74,12 +76,12 @@ onSubmitLogin() {
       },
       error: (err) => {
         console.error(err);
-        console.error('Usuario o contraseña incorrectos!');
+        this.toastr.error('Error al iniciar sesión', 'Por favor verifica tus credenciales');
       }
     });
   } else {
     this.loginForm.markAllAsTouched();
-    console.error('Formulario incorrecto!');
+    this.toastr.error('Debe ingresar un correo y contraseña válidos', 'Error');
   }
 }
 
@@ -87,7 +89,7 @@ onSubmitLogin() {
 onSubmitRecuperar() {
   if (this.recuperarForm.invalid) {
     this.recuperarForm.markAllAsTouched();
-    console.error('Debe ingresar un correo válido!');
+    this.toastr.error('Debe ingresar un correo válido', 'Error');
     return;
   }
 
@@ -95,7 +97,7 @@ onSubmitRecuperar() {
 
   this._usuarioService.forgotPassword(username).subscribe({
     next: () => {
-      console.log('Código enviado al correo!');
+      this.toastr.success('Se ha enviado un código de recuperación a tu correo', 'Éxito');
     },
     error: (err) => {
       console.error(err);

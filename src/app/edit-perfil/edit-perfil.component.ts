@@ -7,6 +7,7 @@ import { UsuarioService } from '../../Servicios/Service/usuario.service';
 import { UsuarioActual } from '../../Modelos/Entity/UsuarioActual';
 import { EmpleadoRegistro } from '../../Modelos/Entity/Empleado';
 import { EstadoEmpleado } from '../../Modelos/Enums/EstadoEmpleado';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-perfil',
@@ -31,7 +32,8 @@ export class EditPerfilComponent {
   constructor(
     private fb: FormBuilder,
     private usuarioService: UsuarioService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -108,7 +110,7 @@ export class EditPerfilComponent {
     } else if (this.rolUsuario === 'ROLE_TUTOR' || this.rolUsuario === 'ROLE_TERAPEUTA') {
       this.guardarTutor();
     } else {
-      alert('Rol no permitido para actualizar perfil');
+      this.toastr.error('Rol no permitido para actualizar perfil', 'Error');
     }
   }
 
@@ -117,7 +119,7 @@ export class EditPerfilComponent {
     const raw = this.perfilForm.getRawValue();
 
     if (!this.idUsuario) {
-      alert('ID del usuario no disponible');
+      this.toastr.error('ID del usuario no disponible', 'Error');
       return;
     }
 
@@ -133,8 +135,8 @@ export class EditPerfilComponent {
     };
 
     this.usuarioService.actualizarEmpleado(this.idUsuario, payload).subscribe({
-      next: () => alert('Perfil admin actualizado correctamente'),
-      error: (err) => alert('Error al actualizar admin: ' + (err.error?.message || ''))
+      next: () =>  this.toastr.success('Perfil admin actualizado correctamente', 'Éxito'),
+      error: (err) => this.toastr.error('Error al actualizar admin:', (err.error?.message || ''))
     });
   }
 
@@ -161,8 +163,8 @@ export class EditPerfilComponent {
     }
 
     this.usuarioService.completarPerfil(payload).subscribe({
-      next: () => alert('Perfil actualizado correctamente'),
-      error: (err) => alert('Error al actualizar tutor: ' + (err.error?.message || ''))
+      next: () => this.toastr.success('Perfil actualizado correctamente', 'Éxito'),
+      error: (err) => this.toastr.error('Error al actualizar tutor:', (err.error?.message || ''))
     });
   }
 
