@@ -137,4 +137,15 @@ export class UsuarioService {
     };
     return this.http.get<any[]>(this._apiUrl + "/tutores", { headers });
   }
+
+  registrarTutorComoAdmin(tutorData: UsuarioRegistro): Observable<any> {
+  const token = localStorage.getItem('accessToken');
+  if (!token) {
+    throw new Error('No se encontró token de autenticación.');
+  }
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+  return this.http.post(`${this._apiUrl}/registrar-tutor`, tutorData, { headers });
+  }
 }

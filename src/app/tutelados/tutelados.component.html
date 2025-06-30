@@ -75,10 +75,6 @@
       <div *ngIf="rolUsuario === 'ROLE_TUTOR'">
         <h3 class="mb-4 text-primary text-center">Mi niño a cargo</h3>
       </div>
-        
-      <div *ngIf="mensaje" [ngClass]="{'alert-success': mensaje.tipo === 'exito', 'alert-danger': mensaje.tipo === 'error'}" class="alert">
-        {{ mensaje.texto }}
-      </div>
 
       <div *ngIf="cargando">Cargando perfil de los tutelados...</div>
       

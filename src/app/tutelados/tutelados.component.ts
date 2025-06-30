@@ -21,7 +21,6 @@ export class TuteladosComponent implements OnInit {
   TuteladosForm!: FormGroup;
   IdEncargado: number = 0;
   cargando = true;
-  mensaje: { tipo: string, texto: string } | null = null;
   tutelados: Paciente[] = [];
   tutores: any[] = [];
   mostrarFormularioRegistro: boolean = false;
@@ -134,7 +133,6 @@ export class TuteladosComponent implements OnInit {
     this.pacienteService.obtenerTodosLosPacientes().subscribe({
       next: (pacientes) => {
         this.tutelados = pacientes;  // Almacenar todos los pacientes
-        console.log(pacientes);
         this.cargando = false;  // Detener la carga
       },
       error: (error) => {
@@ -177,14 +175,14 @@ export class TuteladosComponent implements OnInit {
     // Si estamos en modo de creación, llamamos al método de registro
     this.pacienteService.registrarPaciente(pacienteDetalles).subscribe({
       next: (response) => {
-        this.mensaje = { tipo: 'exito', texto: 'Paciente registrado correctamente.' };
+        this.toastr.success('Paciente registrado correctamente.', 'Éxito');
         this.cerrarFormulario();  // Cerrar el formulario después de la creación
         this.obtenerPacientes();  // Recargar la lista de pacientes
         this.router.navigate(['/tutelados']);
       },
       error: (error) => {
         console.error('Error al registrar paciente:', error);
-        this.mensaje = { tipo: 'error', texto: 'Error al registrar el paciente. Intente nuevamente.' };
+        this.toastr.error('Error al registrar el paciente. Intente nuevamente.', 'Error');
       }
     });
   }
