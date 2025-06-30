@@ -78,4 +78,7 @@ export class InicioPrincipalComponent {
     this.router.navigate(['/disponibilidad']);
   }
 
+  irDisponibilidadTerapeuta() {
+    this.router.navigate(['/disponibilidad-terapeuta']);
+  }
 }

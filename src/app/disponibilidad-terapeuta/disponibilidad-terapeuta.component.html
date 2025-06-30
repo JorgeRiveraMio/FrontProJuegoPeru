@@ -70,72 +70,32 @@
         </a>
       </li>
     </ul>
-  </div>
-
-  <div class="main-content mt-4">
-
-    <div class="container mt-4">
-        <h3>Registrar nuevo Tutor</h3>
-        <form [formGroup]="form" (ngSubmit)="registrarTutor()">
-            <div class="row">
-            <div class="col-md-6 mb-3">
-                <label>Nombre</label>
-                <input formControlName="name" class="form-control" />
-            </div>
-            <div class="col-md-6 mb-3">
-                <label>Apellido</label>
-                <input formControlName="lastname" class="form-control" />
-            </div>
-            <div class="col-md-6 mb-3">
-                <label>DNI</label>
-                <input formControlName="dni" class="form-control" />
-            </div>
-            <div class="col-md-6 mb-3">
-                <label>Email</label>
-                <input formControlName="username" class="form-control" />
-            </div>
-            <div class="col-md-6 mb-3">
-                <label>Contraseña</label>
-                <input formControlName="password" type="password" class="form-control" />
-            </div>
-            <div class="col-md-6 mb-3">
-                <label>Dirección</label>
-                <input formControlName="direccion" class="form-control" />
-            </div>
-            <div class="col-md-6 mb-3">
-                <label>Teléfono</label>
-                <input formControlName="telefono" class="form-control" />
-            </div>
-            </div>
-            <button class="btn btn-primary">Registrar</button>
-        </form>
-        </div>
-
-        <hr class="my-4">
-
-<h4>Lista de Tutores Registrados</h4>
-    <div class="table-responsive">
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
-        <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>DNI</th>
-            <th>Correo</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let tutor of tutores">
-            <td>{{ tutor.name }}</td>
-            <td>{{ tutor.lastname }}</td>
-            <td>{{ tutor.dni }}</td>
-            <td>{{ tutor.username }}</td>
-        </tr>
-        </tbody>
-    </table>
     </div>
+    <div class="main-content mt-4">
+        <div class="container mt-4">
+            <h3 class="text-center titulo">Mi horario laboral</h3>
+            <div *ngIf="disponibilidad.length > 0; else noData">
+                <table class="table table-striped table-hover table-custom">
+                <thead>
+                    <tr>
+                    <th>Día</th>
+                    <th>Hora Inicio</th>
+                    <th>Hora Fin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of disponibilidad">
+                    <td>{{ item.diaSemana }}</td>
+                    <td>{{ item.horaInicio }}</td>
+                    <td>{{ item.horaFin }}</td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
 
-  </div>
-
+            <ng-template #noData>
+                <p class="text-muted">No tienes horarios asignados por el momento.</p>
+            </ng-template>
+            </div>
+    </div>
 </div>
-  

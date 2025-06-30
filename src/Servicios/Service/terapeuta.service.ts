@@ -87,4 +87,12 @@ export class TerapeutaService {
     });
   }
 
+  obtenerDisponibilidadPorEmpleado(idEmpleado: number): Observable<TerapeutaDisponibilidad[]> {
+  const token = localStorage.getItem('accessToken');
+  const headers = {
+    Authorization: `Bearer ${token}`
+  };
+  return this.http.get<TerapeutaDisponibilidad[]>(`${this._apiUrl}/disponibilidad/${idEmpleado}`, { headers });
+  }
+
 }

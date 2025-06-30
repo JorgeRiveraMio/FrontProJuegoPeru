@@ -19,6 +19,13 @@
             </a>
         </li>
 
+        <li *ngIf="rolUsuario === 'ROLE_TERAPEUTA'">
+            <a routerLink="/disponibilidad-terapeuta" routerLinkActive="active" class="nav-link">
+            <i class="fa-solid fa-calendar me-2"></i>
+            <span class="link-text">Mi disponibilidad</span>
+            </a>
+        </li>
+
         <!-- Solo para ADMIN barra de navegación -->
         <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
             <a routerLink="/terapeuta" routerLinkActive="active" class="nav-link">

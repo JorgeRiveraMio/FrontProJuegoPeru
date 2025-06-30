@@ -19,6 +19,13 @@
         </a>
       </li>
 
+      <li *ngIf="rolUsuario === 'ROLE_TERAPEUTA'">
+        <a routerLink="/disponibilidad-terapeuta" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-calendar me-2"></i>
+          <span class="link-text">Mi disponibilidad</span>
+        </a>
+      </li>
+
       <!-- Solo para ADMIN barra de navegación -->
       <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
         <a routerLink="/terapeuta" routerLinkActive="active" class="nav-link">
@@ -127,6 +134,17 @@
       </div>
     </ng-container>
 
+    <ng-container *ngIf="rolUsuario === 'ROLE_TERAPEUTA'">
+      <h2 class="mt-4">Citas</h2>
+      <div class="btn-group-vertical citas-group">
+        <button class="btn citas w-100 d-flex align-items-center px-4" (click)="irCitasGeneradas()">
+          <i class="fa-solid fa-calendar-check me-2"></i> Citas
+        </button>
+      <h2 class="mt-4">Horario</h2>
+        <button class="btn citas w-100 d-flex align-items-center px-4" (click)="irDisponibilidadTerapeuta()">
+          <i class="fa-solid fa-clock me-2"></i> Mi Disponibilidad
+        </button>
+      </div>
+    </ng-container>
+    </div>
   </div>
-</div>
-
