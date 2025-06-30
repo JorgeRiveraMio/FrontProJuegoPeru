@@ -63,6 +63,13 @@
         </a>
       </li>
 
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/tipo-sesion" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-stethoscope me-2"></i>
+          <span class="link-text">Tipos de Sesiones</span>
+        </a>
+      </li>
+
       <li>
         <a (click)="cerrarSesion()" class="nav-link" style="cursor: pointer;">
           <i class="fa-solid fa-right-from-bracket me-2"></i>

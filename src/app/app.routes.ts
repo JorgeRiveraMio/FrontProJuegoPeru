@@ -36,8 +36,17 @@ export const routes: Routes = [
     {
         path: 'tutores',
         loadComponent: () => import('./tutores/tutores.component').then(m => m.TutoresComponent)
-    },{
+    },
+    {
         path: 'disponibilidad-terapeuta',
         loadComponent: () => import('./disponibilidad-terapeuta/disponibilidad-terapeuta.component').then(m => m.DisponibilidadTerapeutaComponent)
+    },
+    {
+        path: 'sesion',
+        loadComponent: () => import('./sesion/sesion.component').then(m => m.SesionComponent)
+    },
+    {
+        path: 'tipo-sesion',
+        loadComponent: () => import('./tipo-sesion/tipo-sesion.component').then(m => m.TipoSesionComponent)
     }
 ];

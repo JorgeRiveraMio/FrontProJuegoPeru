@@ -1,5 +1,5 @@
 export enum EstadoSesion {
-    Programado,
-    Finalizado,
-    Cancelado
+    PROGRAMADA,
+    FINALIZADA,
+    CANCELADA
 }
