@@ -21,11 +21,13 @@ export class SesionComponent {
   nombreUsuario: string = '';
   rolUsuario: string = '';
   idUsuario: number = 0;
-
+  minDate: string = '';
   formularioSesion!: FormGroup;
   pacientes: any[] = [];
   terapeutas: any[] = [];
   tiposSesion: any[] = [];
+  horasDisponibles: string[] = [];
+
 
   constructor(
     private fb: FormBuilder,
@@ -38,6 +40,11 @@ export class SesionComponent {
   ) {}
 
   ngOnInit(): void {
+    this.generarHorasDisponibles();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.minDate = tomorrow.toISOString().split('T')[0];
+
     this.formularioSesion = this.fb.group({
       pacienteId: ['', Validators.required],
       empleadoTerapeutaId: ['', Validators.required],
@@ -64,6 +71,17 @@ export class SesionComponent {
 
   }
 
+  generarHorasDisponibles() {
+  const horas: string[] = [];
+  for (let h = 8; h < 22; h++) {
+    for (let m = 0; m < 60; m += 30) {
+      const hora = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+      horas.push(hora);
+    }
+  }
+  this.horasDisponibles = horas;
+}
+
   obtenerRol(idRol: number): string {
     switch (idRol) {
       case 1: return 'ROLE_TUTOR';
@@ -86,6 +104,33 @@ export class SesionComponent {
 
   guardarSesion(): void {
   const formValue = this.formularioSesion.value;
+  const hora = this.formularioSesion.value.hora;
+  const fecha = this.formularioSesion.value.fechaSesion;
+
+    if (!hora || !fecha) {
+    alert('Completa todos los campos requeridos.');
+    return;
+  }
+
+  const [horaStr, minutosStr] = hora.split(':');
+  const horaNum = parseInt(horaStr, 10);
+
+  if (horaNum < 8 || horaNum >= 22) {
+    alert('La hora debe estar entre las 08:00 y las 21:59.');
+    return;
+  }
+
+  const fechaHoy = new Date();
+  const fechaSeleccionada = new Date(fecha);
+
+  // Validar que la fecha seleccionada sea posterior a hoy
+  fechaHoy.setHours(0, 0, 0, 0);
+  fechaSeleccionada.setHours(0, 0, 0, 0);
+
+  if (fechaSeleccionada <= fechaHoy) {
+    alert('La fecha debe ser posterior al día actual.');
+    return;
+  }
 
   const sesionDto = {
     pacienteId: Number(formValue.pacienteId),

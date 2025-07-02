@@ -19,7 +19,7 @@
         </a>
       </li>
 
-      <li>
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN' || rolUsuario === 'ROLE_TUTOR'">
         <a routerLink="/sesion" routerLinkActive="active" class="nav-link">
           <i class="fa-solid fa-calendar-plus me-2"></i>
           <span class="link-text">Citas</span>
@@ -94,7 +94,7 @@
   </div>
     <div class="main-content mt-4">
         <div class="container">
-            <h3 class="text-center">Crear nueva sesión</h3>
+            <h3 class="text-center titulo">Crear nueva sesión</h3>
             <form [formGroup]="formularioSesion" (ngSubmit)="guardarSesion()">
                 <div class="mb-3">
                 <label>Paciente:</label>
@@ -119,13 +119,12 @@
 
                 <div class="mb-3">
                 <label>Fecha:</label>
-                <input type="date" class="form-control" formControlName="fechaSesion">
+                <input type="date" class="form-control" formControlName="fechaSesion" [min]="minDate">
                 </div>
 
-                <div class="mb-3">
-                <label>Hora:</label>
-                <input type="time" class="form-control" formControlName="hora">
-                </div>
+                <select class="form-control mb-3" formControlName="hora">
+                    <option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</option>
+                </select>
 
                 <button type="submit" class="btn btn-primary">Guardar Sesión</button>
             </form>

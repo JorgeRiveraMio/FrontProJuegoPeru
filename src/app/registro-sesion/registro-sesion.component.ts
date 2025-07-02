@@ -44,6 +44,8 @@ export class RegistroSesionComponent {
         this.obtenerPacientesYTerapias(); // ya lo tienes
       } else if (this.rolUsuario === 'ROLE_ADMIN') {
         this.obtenerTodasLasSesiones(); // 👈 NUEVO
+      }else if (this.rolUsuario === 'ROLE_TERAPEUTA') {
+        this.obtenerSesionesPorTerapeuta(this.idUsuario); // 👈 nuevo método
       }
     },
     error: () => {
@@ -103,6 +105,37 @@ export class RegistroSesionComponent {
     error: (err) => {
       console.error('Error al obtener todas las sesiones:', err);
       this.toastr.error('Error al cargar sesiones');
+    }
+  });
+}
+
+obtenerSesionesPorTerapeuta(idTerapeuta: number): void {
+  this.sesionService.obtenerSesionesPorTerapeuta(idTerapeuta).subscribe({
+    next: (sesiones) => {
+      this.sesionesPorPaciente = [];
+
+      const agrupado = new Map<number, { paciente: any, sesiones: any[] }>();
+
+      sesiones.forEach(sesion => {
+        const paciente: any = sesion.paciente;
+        const pacienteId = paciente.id ?? paciente.idPaciente;
+        if (!pacienteId) return;
+
+        if (!agrupado.has(pacienteId)) {
+          agrupado.set(pacienteId, {
+            paciente: paciente,
+            sesiones: []
+          });
+        }
+
+        agrupado.get(pacienteId)?.sesiones.push(sesion);
+      });
+
+      this.sesionesPorPaciente = Array.from(agrupado.values());
+    },
+    error: (err) => {
+      console.error('Error al obtener sesiones del terapeuta:', err);
+      this.toastr.error('Error al cargar sesiones del terapeuta');
     }
   });
 }

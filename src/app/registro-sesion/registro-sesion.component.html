@@ -19,7 +19,7 @@
         </a>
       </li>
 
-      <li>
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN' || rolUsuario === 'ROLE_TUTOR'">
         <a routerLink="/sesion" routerLinkActive="active" class="nav-link">
           <i class="fa-solid fa-calendar-plus me-2"></i>
           <span class="link-text">Citas</span>
@@ -118,6 +118,12 @@
                     <strong>{{ sesion.fechaSesion }} {{ sesion.hora }}</strong> - {{ sesion.tipoSesion.nombre }}
                     <br>
                     <small>Estado: {{ sesion.estado }}</small>
+                    
+                    <small>
+                        Terapeuta: {{ sesion.terapeuta?.name }} {{ sesion.terapeuta?.lastname }}<br>
+                        Especialidad: {{ sesion.terapeuta?.especialidad }}
+                    </small>
+
                 </li>
                 </ul>
                 </div>

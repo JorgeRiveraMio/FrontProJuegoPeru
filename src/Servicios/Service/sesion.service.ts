@@ -88,4 +88,15 @@ export class SesionService {
     return this.http.get<Sesion[]>(`${this._apiUrl}/todas`, { headers });
   }
 
+  obtenerSesionesPorTerapeuta(id: number): Observable<any[]> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('No se encontró token de autenticación.');
+    }
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+  return this.http.get<any[]>(`${this._apiUrl}/terapeuta/${id}`, { headers });
+  }
+
 }
