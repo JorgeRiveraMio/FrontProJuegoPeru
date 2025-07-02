@@ -1,1 +1,134 @@
-<p>sesion works!</p>
+<div class="d-flex flex-column flex-md-row">
+  <div [class.collapsed]="isCollapsed" class="sidebar">
+    <button class="toggle-btn" (click)="toggleSidebar()">☰</button>
+    <div class="sidebar-header p-3 border-bottom">
+      <p class="welcome-text mb-0">Bienvenido(a),</p>
+      <h5 class="username">{{ nombreUsuario }}</h5>
+    </div>
+    <ul class="nav flex-column">
+      <li>
+        <a routerLink="/inicio-principal" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-house me-2"></i>
+          <span class="link-text">Inicio</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/edit-perfil" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-user me-2"></i>
+          <span class="link-text">Perfil</span>
+        </a>
+      </li>
+
+      <li>
+        <a routerLink="/sesion" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-calendar-plus me-2"></i>
+          <span class="link-text">Citas</span>
+        </a>
+      </li>
+
+      <li>
+        <a routerLink="/registro-sesion" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-calendar-check me-2"></i>
+          <span class="link-text">Registro de citas</span>
+        </a>
+      </li>
+
+      <li *ngIf="rolUsuario === 'ROLE_TERAPEUTA'">
+        <a routerLink="/disponibilidad-terapeuta" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-calendar me-2"></i>
+          <span class="link-text">Mi disponibilidad</span>
+        </a>
+      </li>
+
+      <!-- Solo para ADMIN barra de navegación -->
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/terapeuta" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-user-doctor me-2"></i>
+          <span class="link-text">Terapeuta</span>
+        </a>
+      </li>
+
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/tutores" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-user-tie me-2"></i>
+          <span class="link-text">Tutor</span>
+        </a>
+      </li>
+
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/tutelados" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-clipboard-user me-2"></i>
+          <span class="link-text">Pacientes</span>
+        </a>
+      </li>
+      
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/disponibilidad" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-calendar me-2"></i>
+          <span class="link-text">Disponibilidad Terapeuta</span>
+        </a>
+      </li>
+
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+        <a routerLink="/tipo-sesion" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-stethoscope me-2"></i>
+          <span class="link-text">Tipos de Sesiones</span>
+        </a>
+      </li>
+
+      <!-- Solo para tutor barra de navegación -->
+      <li *ngIf="rolUsuario === 'ROLE_TUTOR'">
+        <a routerLink="/tutelados" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-clipboard-user me-2"></i>
+          <span class="link-text">Niños a mi cargo</span>
+        </a>
+      </li>
+
+      <li>
+        <a (click)="cerrarSesion()" class="nav-link" style="cursor: pointer;">
+          <i class="fa-solid fa-right-from-bracket me-2"></i>
+          <span class="link-text">Cerrar sesión</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+    <div class="main-content mt-4">
+        <div class="container">
+            <h3 class="text-center">Crear nueva sesión</h3>
+            <form [formGroup]="formularioSesion" (ngSubmit)="guardarSesion()">
+                <div class="mb-3">
+                <label>Paciente:</label>
+                <select class="form-control" formControlName="pacienteId">
+                    <option *ngFor="let paciente of pacientes" [value]="paciente.id">{{ paciente.nombre }} {{ paciente.apellido }}</option>
+                </select>
+                </div>
+
+                <div class="mb-3">
+                <label>Terapeuta:</label>
+                <select class="form-control" formControlName="empleadoTerapeutaId">
+                    <option *ngFor="let terapeuta of terapeutas" [value]="terapeuta.idUsuario">{{ terapeuta.name }} {{ terapeuta.lastname }}</option>
+                </select>
+                </div>
+
+                <div class="mb-3">
+                <label>Tipo de sesión:</label>
+                <select class="form-control" formControlName="tipoSesionId">
+                    <option *ngFor="let tipo of tiposSesion" [value]="tipo.id">{{ tipo.nombre }}</option>
+                </select>
+                </div>
+
+                <div class="mb-3">
+                <label>Fecha:</label>
+                <input type="date" class="form-control" formControlName="fechaSesion">
+                </div>
+
+                <div class="mb-3">
+                <label>Hora:</label>
+                <input type="time" class="form-control" formControlName="hora">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Guardar Sesión</button>
+            </form>
+            </div>
+    </div>
+  </div>

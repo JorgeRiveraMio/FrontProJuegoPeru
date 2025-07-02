@@ -19,6 +19,20 @@
         </a>
       </li>
 
+      <li>
+        <a routerLink="/sesion" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-calendar-plus me-2"></i>
+          <span class="link-text">Citas</span>
+        </a>
+      </li>
+
+      <li>
+        <a routerLink="/registro-sesion" routerLinkActive="active" class="nav-link">
+          <i class="fa-solid fa-calendar-check me-2"></i>
+          <span class="link-text">Registro de citas</span>
+        </a>
+      </li>
+
       <li *ngIf="rolUsuario === 'ROLE_TERAPEUTA'">
         <a routerLink="/disponibilidad-terapeuta" routerLinkActive="active" class="nav-link">
           <i class="fa-solid fa-calendar me-2"></i>

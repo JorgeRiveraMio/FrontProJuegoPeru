@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { UsuarioService } from '../../Servicios/Service/usuario.service';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { tipoSesionService } from '../../Servicios/Service/tipo-sesion.service';
 import { TipoSesion } from '../../Modelos/Entity/TipoSesion';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-tipo-sesion',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './tipo-sesion.component.html',
   styleUrl: './tipo-sesion.component.css'
 })

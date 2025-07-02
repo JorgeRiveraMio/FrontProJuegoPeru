@@ -92,80 +92,43 @@
       </li>
     </ul>
   </div>
+    <div class="main-content mt-4">
+        <H4 class="text-center titulo"> REGISTRO DE SESIONES</H4>
+        <div class="accordion" id="accordionPacientes">
+        <div class="accordion-item" *ngFor="let item of sesionesPorPaciente; let i = index">
+            <h2 class="accordion-header" [id]="'headingPaciente' + i">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                [attr.data-bs-target]="'#collapsePaciente' + i" aria-expanded="false"
+                [attr.aria-controls]="'collapsePaciente' + i">
+                Paciente: {{ item.paciente.nombre }} {{ item.paciente.apellido }}
+            </button>
+            </h2>
+            <div [id]="'collapsePaciente' + i" class="accordion-collapse collapse"
+            [attr.aria-labelledby]="'headingPaciente' + i" data-bs-parent="#accordionPacientes">
+            <div class="accordion-body">
 
-  <div class="main-content mt-4">
-    <div class="logo-container mb-4">
-      <img src="assets/logoo.png" alt="Logo Marca" class="logo" />
+                <div *ngIf="item.sesiones.length > 0; else noSesiones">
+                <ul class="list-group">
+                <li *ngFor="let sesion of item.sesiones" class="list-group-item"
+                    [ngClass]="{
+                        'bg-programada text-dark': sesion.estado === 'PROGRAMADA',
+                        'bg-finalizada text-white': sesion.estado === 'FINALIZADA',
+                        'bg-cancelada text-white': sesion.estado === 'CANCELADA'
+                    }">
+                    <strong>{{ sesion.fechaSesion }} {{ sesion.hora }}</strong> - {{ sesion.tipoSesion.nombre }}
+                    <br>
+                    <small>Estado: {{ sesion.estado }}</small>
+                </li>
+                </ul>
+                </div>
+
+                <ng-template #noSesiones>
+                <p class="text-muted">Este paciente no tiene sesiones registradas.</p>
+                </ng-template>
+
+            </div>
+            </div>
+        </div>
     </div>
-
-    <!-- VISTA ROLE_TUTOR INTERIOR-->
-    <ng-container *ngIf="rolUsuario === 'ROLE_TUTOR'">
-      <h2>Citas</h2>
-      <div class="btn-group-vertical citas-group">
-        <button class="btn citas w-100 d-flex align-items-center px-4" (click)="Cita()">
-          <i class="fa-solid fa-calendar-plus me-2"></i> Registrar Cita
-        </button>
-        <button class="btn citas w-100 d-flex align-items-center px-4" (click)="Cita()">
-          <i class="fa-solid fa-calendar-check me-2"></i> Citas Generadas
-        </button>
-      </div>
-
-      <h2 class="mt-4">Ordenes</h2>
-      <div class="btn-group-vertical ordenes-group">
-        <button class="btn orden w-100 d-flex align-items-center px-4" (click)="irRecomendaciones()">
-          <i class="fa-solid fa-file-medical me-2"></i> Recetas
-        </button>
-      </div>
-      <h2 class="mt-4">Niños a mi cargo</h2>
-      <div class="btn-group-vertical ordenes-group">
-        <button class="btn orden w-100 d-flex align-items-center px-4" (click)="irTutelados()">
-          <i class="fa-solid fa-hands-holding-child me-2"></i> Tutelados
-        </button>
-      </div>
-    </ng-container>
-
-    <!-- VISTA ROLE_ADMIN INTERIOR-->
-    <ng-container *ngIf="rolUsuario === 'ROLE_ADMIN'">
-      <h2 class="mt-4">Citas</h2>
-      <div class="btn-group-vertical citas-group">
-        <button class="btn citas w-100 d-flex align-items-center px-4" (click)="Cita()">
-          <i class="fa-solid fa-calendar-check me-2"></i> Citas
-        </button>
-        <button class="btn citas w-100 d-flex align-items-center px-4" (click)="irDisponibilidad()">
-          <i class="fa-solid fa-clock me-2"></i> Disponibilidad
-        </button>
-      </div>
-      <h2 class="mt-4">Pagos</h2>
-      <div class="btn-group-vertical citas-group">
-        <button class="btn pago w-100 d-flex align-items-center px-4" (click)="irPagos()">
-          <i class="fa-solid fa-wallet me-2"></i> Pagos
-        </button>
-      </div>
-      <h2 class="mt-4">Terapeutas</h2>
-      <div class="btn-group-vertical citas-group">
-        <button class="btn terapeuta w-100 d-flex align-items-center px-4" (click)="irTerapeuta()">
-          <i class="fa-solid fa-user-doctor me-2"></i> Registro de Terapeutas
-        </button>
-      </div>
-      <h2 class="mt-4">Pacientes</h2>
-      <div class="btn-group-vertical ordenes-group">
-        <button class="btn orden w-100 d-flex align-items-center px-4" (click)="irTutelados()">
-          <i class="fa-solid fa-hands-holding-child me-2"></i> Tutelados
-        </button>
-      </div>
-    </ng-container>
-
-    <ng-container *ngIf="rolUsuario === 'ROLE_TERAPEUTA'">
-      <h2 class="mt-4">Citas</h2>
-      <div class="btn-group-vertical citas-group">
-        <button class="btn citas w-100 d-flex align-items-center px-4" (click)="Cita()">
-          <i class="fa-solid fa-calendar-check me-2"></i> Citas
-        </button>
-      <h2 class="mt-4">Horario</h2>
-        <button class="btn citas w-100 d-flex align-items-center px-4" (click)="irDisponibilidadTerapeuta()">
-          <i class="fa-solid fa-clock me-2"></i> Mi Disponibilidad
-        </button>
-      </div>
-    </ng-container>
     </div>
-  </div>
+</div>

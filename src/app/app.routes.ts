@@ -48,5 +48,9 @@ export const routes: Routes = [
     {
         path: 'tipo-sesion',
         loadComponent: () => import('./tipo-sesion/tipo-sesion.component').then(m => m.TipoSesionComponent)
+    },
+    {
+        path: 'registro-sesion',
+        loadComponent: () => import('./registro-sesion/registro-sesion.component').then(m => m.RegistroSesionComponent)
     }
 ];

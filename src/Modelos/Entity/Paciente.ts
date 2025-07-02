@@ -1,5 +1,6 @@
 import { Sexo } from "../Enums/Sexo";
 export interface Paciente { 
+    id?: number;
     nombre: string;
     apellido: string;
     fechaNacimiento: Date;

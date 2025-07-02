@@ -7,7 +7,7 @@ export interface Sesion {
     id: number;
     paciente: Paciente;
     terapeuta:Empleado;
-    administrador: Empleado;
+    administrador?: Empleado;
     tipoSesion:TipoSesion;
     fechaSesion: Date;
     hora: string;

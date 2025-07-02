@@ -58,18 +58,17 @@ export class InicioPrincipalComponent {
   }
 
   // Métodos de navegación
-  irRegistrarCita() {
-    this.router.navigate(['/registrar-cita']);
+  Cita() {
+    this.router.navigate(['/sesion']);
   }
 
-  irCitasGeneradas() {
-    this.router.navigate(['/citas-generadas']);
+  irPagos() {
+    this.router.navigate(['/pagos']);
   }
 
-  irRecetas() {
-    this.router.navigate(['/recetas']);
+  irTerapeuta() {
+    this.router.navigate(['/terapeuta']);
   }
-
   irTutelados() {
     this.router.navigate(['/tutelados']);
   }
@@ -80,5 +79,9 @@ export class InicioPrincipalComponent {
 
   irDisponibilidadTerapeuta() {
     this.router.navigate(['/disponibilidad-terapeuta']);
+  }
+
+  irRecomendaciones() {
+    this.router.navigate(['/recomendaciones']);
   }
 }
