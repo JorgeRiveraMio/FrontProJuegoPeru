@@ -216,6 +216,7 @@
              <td *ngIf="rolUsuario === 'ROLE_ADMIN'">{{ nino.tutor.name }} {{ nino.tutor.lastname }}</td>
             <td>
               <button class="btn btn-warning" (click)="editar(nino)">Editar</button>
+              <button class="btn btn-info" (click)="verInformes(nino.id)">Ver Informes</button>
             </td>
           </tr>
         </tbody>

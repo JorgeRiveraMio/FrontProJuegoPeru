@@ -178,7 +178,7 @@ export class TuteladosComponent implements OnInit {
         this.toastr.success('Paciente registrado correctamente.', 'Éxito');
         this.cerrarFormulario();  // Cerrar el formulario después de la creación
         this.obtenerPacientes();  // Recargar la lista de pacientes
-        this.router.navigate(['/tutelados']);
+        this.router.navigate(['/informe-evaluacion'], { queryParams: { pacienteId: response.id } });
       },
       error: (error) => {
         console.error('Error al registrar paciente:', error);
@@ -240,17 +240,26 @@ editar(nino: Paciente): void {
   }
 
   mostrarFormulario(): void {
-  this.mostrarFormularioRegistro = true;
-  this.tuteladoEditar = null;
-  this.TuteladosForm.reset();
+    this.mostrarFormularioRegistro = true;
+    this.tuteladoEditar = null;
+    this.TuteladosForm.reset();
 
-  if (this.rolUsuario === 'ROLE_ADMIN') {
-    this.TuteladosForm.get('tutor')?.enable();
+    if (this.rolUsuario === 'ROLE_ADMIN') {
+      this.TuteladosForm.get('tutor')?.enable();
+    }
   }
-}
   // Método para cerrar el formulario de registro
   cerrarFormulario(): void {
     this.mostrarFormularioRegistro = false;
     this.TuteladosForm.reset();
   }
+
+  verInformes(id?: number): void {
+    if (!id) {
+      this.toastr.warning('ID de paciente no válido');
+      return;
+    }
+    this.router.navigate(['/informe-evaluacion'], { queryParams: { pacienteId: id } });
+  }
+
 }

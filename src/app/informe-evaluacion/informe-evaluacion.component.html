@@ -1,0 +1,164 @@
+<div class="d-flex flex-column flex-md-row">
+    <div [class.collapsed]="isCollapsed" class="sidebar">
+        <button class="toggle-btn" (click)="toggleSidebar()">☰</button>
+        <div class="sidebar-header p-3 border-bottom">
+        <p class="welcome-text mb-0">Bienvenido(a),</p>
+        <h5 class="username">{{ nombreUsuario }}</h5>
+        </div>
+        <ul class="nav flex-column">
+        <li>
+            <a routerLink="/inicio-principal" routerLinkActive="active" class="nav-link">
+            <i class="fa-solid fa-house me-2"></i>
+            <span class="link-text">Inicio</span>
+            </a>
+        </li>
+        <li>
+            <a routerLink="/edit-perfil" routerLinkActive="active" class="nav-link">
+            <i class="fa-solid fa-user me-2"></i>
+            <span class="link-text">Perfil</span>
+            </a>
+        </li>
+
+        <li *ngIf="rolUsuario === 'ROLE_ADMIN' || rolUsuario === 'ROLE_TUTOR'">
+            <a routerLink="/sesion" routerLinkActive="active" class="nav-link">
+            <i class="fa-solid fa-calendar-plus me-2"></i>
+            <span class="link-text">Citas</span>
+            </a>
+        </li>
+
+        <li>
+            <a routerLink="/registro-sesion" routerLinkActive="active" class="nav-link">
+            <i class="fa-solid fa-calendar-check me-2"></i>
+            <span class="link-text">Registro de citas</span>
+            </a>
+        </li>
+
+        <li *ngIf="rolUsuario === 'ROLE_TERAPEUTA'">
+            <a routerLink="/disponibilidad-terapeuta" routerLinkActive="active" class="nav-link">
+            <i class="fa-solid fa-calendar me-2"></i>
+            <span class="link-text">Mi disponibilidad</span>
+            </a>
+        </li>
+
+        <!-- Solo para ADMIN barra de navegación -->
+        <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+            <a routerLink="/terapeuta" routerLinkActive="active" class="nav-link">
+            <i class="fa-solid fa-user-doctor me-2"></i>
+            <span class="link-text">Terapeuta</span>
+            </a>
+        </li>
+
+        <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+            <a routerLink="/tutores" routerLinkActive="active" class="nav-link">
+            <i class="fa-solid fa-user-tie me-2"></i>
+            <span class="link-text">Tutor</span>
+            </a>
+        </li>
+
+        <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+            <a routerLink="/tutelados" routerLinkActive="active" class="nav-link">
+            <i class="fa-solid fa-clipboard-user me-2"></i>
+            <span class="link-text">Pacientes</span>
+            </a>
+        </li>
+        
+        <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+            <a routerLink="/disponibilidad" routerLinkActive="active" class="nav-link">
+            <i class="fa-solid fa-calendar me-2"></i>
+            <span class="link-text">Disponibilidad Terapeuta</span>
+            </a>
+        </li>
+
+        <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+            <a routerLink="/tipo-sesion" routerLinkActive="active" class="nav-link">
+            <i class="fa-solid fa-stethoscope me-2"></i>
+            <span class="link-text">Tipos de Sesiones</span>
+            </a>
+        </li>
+
+        <!-- Solo para tutor barra de navegación -->
+        <li *ngIf="rolUsuario === 'ROLE_TUTOR'">
+            <a routerLink="/tutelados" routerLinkActive="active" class="nav-link">
+            <i class="fa-solid fa-clipboard-user me-2"></i>
+            <span class="link-text">Niños a mi cargo</span>
+            </a>
+        </li>
+
+        <li>
+            <a (click)="cerrarSesion()" class="nav-link" style="cursor: pointer;">
+            <i class="fa-solid fa-right-from-bracket me-2"></i>
+            <span class="link-text">Cerrar sesión</span>
+            </a>
+        </li>
+        </ul>
+</div>
+<div class="container mt-4">
+    <h2 class="mb-4" *ngIf="!soloLectura">Subir Informe de Evaluación Inicial</h2>
+
+    <form *ngIf="!soloLectura" (ngSubmit)="subirInforme()" #informeForm="ngForm" class="card p-4 shadow-sm bg-white rounded">
+        <div class="form-group mb-3">
+        <label for="pacienteId" class="form-label fw-semibold">Seleccione un niño</label>
+        <select [(ngModel)]="pacienteId" name="pacienteId" class="form-control" required>
+            <option [ngValue]="null" disabled>Seleccione un paciente</option>
+            <option *ngFor="let p of pacientes" [ngValue]="p.id">
+            {{ p.nombre }} {{ p.apellido }} (DNI: {{ p.dni }})
+            </option>
+        </select>
+        </div>
+
+
+        <div class="form-group mb-3">
+        <label for="fecha" class="form-label fw-semibold">Fecha Última Terapia</label>
+        <input type="date" id="fecha" [(ngModel)]="fechaUltimaTerapia" name="fechaUltimaTerapia" class="form-control" required />
+        </div>
+
+        <div class="form-group mb-3">
+        <label for="observaciones" class="form-label fw-semibold">Observaciones</label>
+        <textarea id="observaciones" [(ngModel)]="observaciones" name="observaciones" rows="3" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group mb-3">
+        <label class="form-label fw-semibold">Subir PDF (Cloudinary)</label>
+        <button type="button" class="btn btn-outline-primary w-100" (click)="abrirWidget()">Subir PDF con Cloudinary</button>
+        <div *ngIf="pdfUrl" class="mt-2 text-success">Archivo cargado: {{ pdfUrl }}</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Guardar Informe</button>
+    </form>
+
+    <hr class="my-5" *ngIf="!soloLectura" />
+
+    <!-- Si no hay informes y está en modo soloLectura -->
+    <div *ngIf="informes.length === 0 && soloLectura" class="text-center mt-5">
+        <h2 class="text-muted">Este paciente aún no tiene informes registrados.</h2>
+    </div>
+
+    <!-- Título y lista de informes -->
+    <div *ngIf="informes.length > 0">
+        <h3 class="mb-3">Lista de Informes</h3>
+
+        <div *ngFor="let informe of informes" class="card p-4 mb-3 shadow-sm bg-light rounded">
+        <div class="row">
+            <div class="col-md-6 mb-2">
+            <strong>Paciente:</strong> {{ informe.paciente.nombre }} {{ informe.paciente.apellido }}
+            </div>
+            <div class="col-md-6 mb-2">
+            <strong>DNI:</strong> {{ informe.paciente.dni }}
+            </div>
+            <div class="col-md-6 mb-2">
+            <strong>Fecha Última Terapia:</strong> {{ informe.fechaUltimaTerapia }}
+            </div>
+            <div class="col-md-6 mb-2">
+            <strong>Estado del Informe:</strong> {{ informe.estadoInforme }}
+            </div>
+            <div class="col-md-12 mb-2">
+            <strong>Observaciones:</strong> {{ informe.observaciones }}
+            </div>
+            <div class="col-md-12">
+            <strong>Archivo PDF:</strong>
+            <button (click)="verPdf(informe.archivoUrl)" class="btn btn-sm btn-outline-primary ms-2">Ver PDF</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

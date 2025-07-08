@@ -84,4 +84,9 @@ export class InicioPrincipalComponent {
   irRecomendaciones() {
     this.router.navigate(['/recomendaciones']);
   }
+
+  irInformes() {
+  this.router.navigate(['/informe-evaluacion']);
+}
+
 }

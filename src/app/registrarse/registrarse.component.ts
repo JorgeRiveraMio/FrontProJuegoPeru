@@ -160,7 +160,7 @@ export class RegistrarseComponent {
         next: (response) => {
           this.toastr.success('Código verificado correctamente', 'Éxito');
           this.cerrarModal();
-          this._router.navigate(['/inicio-principal']);
+          this._router.navigate(['/login']);
         },
         error: (err) => {
           this.toastr.error('Código incorrecto. Inténtalo nuevamente', 'Error');
