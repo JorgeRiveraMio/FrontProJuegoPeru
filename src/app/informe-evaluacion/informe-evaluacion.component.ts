@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
-
+import { ToastrService } from 'ngx-toastr';
 import { InformeEvaluacionService } from '../../Servicios/Service/informe-evaluacion.service';
 import { PacienteService } from '../../Servicios/Service/paciente.service';
 import { UsuarioService } from '../../Servicios/Service/usuario.service';
@@ -37,7 +37,8 @@ export class InformeEvaluacionComponent implements OnInit {
     private pacienteService: PacienteService,
     private usuarioService: UsuarioService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+  private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -163,6 +164,37 @@ export class InformeEvaluacionComponent implements OnInit {
 
   toggleSidebar(): void {
     this.isCollapsed = !this.isCollapsed;
+  }
+  aprobarInforme(informeId: number): void {
+        this.informeService.aprobarInforme(informeId).subscribe({
+      next: (res) => {
+         this.toastr.success('Informe aprobado con éxito ✅', 'Aprobado');
+         this.informeService.obtenerTodos().subscribe({
+          next: data => this.informes = data,
+          error: () => alert('Error al cargar todos los informes')
+        });
+       
+      },
+      error: (err) => {
+        console.error('Error al aprobar', err);
+      }
+    });
+
+  }
+  desaprobarInforme(informeId: number): void {
+  this.informeService.desaprobarInforme(informeId).subscribe({
+        next: (res) => {
+          this.toastr.success('Informe desaprobado con éxito ✅', 'Aprobado');
+          this.informeService.obtenerTodos().subscribe({
+            next: data => this.informes = data,
+            error: () => alert('Error al cargar todos los informes')
+          });
+        
+        },
+        error: (err) => {
+          console.error('Error al aprobar', err);
+        }
+      });
   }
 
   cerrarSesion(): void {

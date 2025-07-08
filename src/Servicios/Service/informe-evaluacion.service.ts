@@ -26,6 +26,15 @@ export class InformeEvaluacionService {
   obtenerPorPaciente(id: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/paciente/${id}`);
   }
+    aprobarInforme(id: number): Observable<any> {
+      const url = `${this.baseUrl}/aprobarId/${id}`;
+      return this.http.put(url, null); // null indica sin body
+    }
+
+     desaprobarInforme(id: number): Observable<any> {
+      const url = `${this.baseUrl}/desaprobarId/${id}`;
+      return this.http.put(url, null); // null indica sin body
+    }
 
 
 }

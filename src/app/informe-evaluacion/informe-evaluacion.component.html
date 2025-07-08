@@ -140,23 +140,29 @@
         <div *ngFor="let informe of informes" class="card p-4 mb-3 shadow-sm bg-light rounded">
         <div class="row">
             <div class="col-md-6 mb-2">
-            <strong>Paciente:</strong> {{ informe.paciente.nombre }} {{ informe.paciente.apellido }}
+                 <strong>Paciente:</strong> {{ informe.paciente.nombre }} {{ informe.paciente.apellido }}
             </div>
             <div class="col-md-6 mb-2">
-            <strong>DNI:</strong> {{ informe.paciente.dni }}
+                 <strong>DNI:</strong> {{ informe.paciente.dni }}
             </div>
             <div class="col-md-6 mb-2">
-            <strong>Fecha Última Terapia:</strong> {{ informe.fechaUltimaTerapia }}
+                 <strong>Fecha Última Terapia:</strong> {{ informe.fechaUltimaTerapia }}
             </div>
             <div class="col-md-6 mb-2">
-            <strong>Estado del Informe:</strong> {{ informe.estadoInforme }}
+                <strong>Estado del Informe:</strong> {{ informe.estadoInforme }}
             </div>
+            
             <div class="col-md-12 mb-2">
-            <strong>Observaciones:</strong> {{ informe.observaciones }}
+                 <strong>Observaciones:</strong> {{ informe.observaciones }}
             </div>
-            <div class="col-md-12">
-            <strong>Archivo PDF:</strong>
-            <button (click)="verPdf(informe.archivoUrl)" class="btn btn-sm btn-outline-primary ms-2">Ver PDF</button>
+            <div class="col-md-6">
+                 <strong>Archivo PDF:</strong>
+                 <button (click)="verPdf(informe.archivoUrl)" class="btn btn-sm btn-outline-primary ms-2">Ver PDF</button>
+            </div>
+             <div class="col-md-6 mb-2">
+            <strong>Cambiar estado:</strong>
+            <button (click)="aprobarInforme(informe.id)" class="btn btn-sm btn-outline-primary ms-2">APROBADO</button>
+            <button (click)="desaprobarInforme(informe.id)" class="btn btn-sm btn-outline-danger ms-2">DESAPROBADO</button>
             </div>
         </div>
         </div>
