@@ -92,42 +92,48 @@
       </li>
     </ul>
   </div>
-    <div class="main-content mt-4">
-        <div class="container">
-            <h3 class="text-center titulo">Crear nueva sesión</h3>
-            <form [formGroup]="formularioSesion" (ngSubmit)="guardarSesion()">
-                <div class="mb-3">
-                <label>Paciente:</label>
-                <select class="form-control" formControlName="pacienteId">
-                    <option *ngFor="let paciente of pacientes" [value]="paciente.id">{{ paciente.nombre }} {{ paciente.apellido }}</option>
-                </select>
-                </div>
+  <div class="main-content mt-4">
+    <div class="container">
+      <h3 class="text-center titulo">Crear nueva sesión</h3>
+      <form [formGroup]="formularioSesion" (ngSubmit)="guardarSesion()">
+        <div class="mb-3">
+          <label>Paciente:</label>
+          <select class="form-control" formControlName="pacienteId">
+            <option *ngFor="let paciente of pacientes" [value]="paciente.id">{{ paciente.nombre }} {{ paciente.apellido }}</option>
+          </select>
+        </div>
 
-                <div class="mb-3">
-                <label>Terapeuta:</label>
-                <select class="form-control" formControlName="empleadoTerapeutaId">
-                    <option *ngFor="let terapeuta of terapeutas" [value]="terapeuta.idUsuario">{{ terapeuta.name }} {{ terapeuta.lastname }}</option>
-                </select>
-                </div>
+        <div class="mb-3">
+          <label>Terapeuta:</label>
+          <select class="form-control" formControlName="empleadoTerapeutaId">
+            <option *ngFor="let terapeuta of terapeutas" [value]="terapeuta.idUsuario">{{ terapeuta.name }} {{ terapeuta.lastname }}</option>
+          </select>
+        </div>
 
-                <div class="mb-3">
-                <label>Tipo de sesión:</label>
-                <select class="form-control" formControlName="tipoSesionId">
-                    <option *ngFor="let tipo of tiposSesion" [value]="tipo.id">{{ tipo.nombre }}</option>
-                </select>
-                </div>
+        <div class="mb-3">
+          <label>Tipo de sesión:</label>
+          <select class="form-control" formControlName="tipoSesionId">
+            <option *ngFor="let tipo of tiposSesion" [value]="tipo.id">{{ tipo.nombre }}</option>
+          </select>
+        </div>
 
-                <div class="mb-3">
-                <label>Fecha:</label>
-                <input type="date" class="form-control" formControlName="fechaSesion" [min]="minDate">
-                </div>
+        <div class="mb-3">
+          <label>Fecha:</label>
+          <input type="date" class="form-control" formControlName="fechaSesion" [min]="minDate">
+        </div>
 
-                <select class="form-control mb-3" formControlName="hora">
-                    <option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</option>
-                </select>
+        <div class="mb-3">
+          <label>Hora disponible:</label>
+          <select class="form-control" formControlName="hora">
+            <option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</option>
+          </select>
+          <div *ngIf="horasDisponibles.length === 0 && formularioSesion.get('fechaSesion')?.value">
+            <small class="text-danger">No hay horarios disponibles para esta fecha.</small>
+          </div>
+        </div>
 
-                <button type="submit" class="btn btn-primary">Guardar Sesión</button>
-            </form>
-            </div>
+        <button type="submit" class="btn btn-primary">Guardar Sesión</button>
+      </form>
     </div>
   </div>
+</div>

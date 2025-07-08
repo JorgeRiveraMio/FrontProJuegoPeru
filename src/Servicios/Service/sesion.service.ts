@@ -3,6 +3,7 @@ import { appsettingsCliente } from "../../Ajustes/app.settings";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Sesion } from "../../Modelos/Entity/Sesion";
+import { TerapeutaDisponibilidad } from "../../Modelos/Entity/TerapeutaDisponibilidad";
 
 @Injectable({
   providedIn: 'root'
@@ -96,7 +97,22 @@ export class SesionService {
     const headers = {
       Authorization: `Bearer ${token}`
     };
-  return this.http.get<any[]>(`${this._apiUrl}/terapeuta/${id}`, { headers });
+    return this.http.get<any[]>(`${this._apiUrl}/terapeuta/${id}`, { headers });
+  }
+
+  obtenerDisponibilidadPorTerapeuta(empleadoId: number): Observable<TerapeutaDisponibilidad[]> {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      throw new Error('No se encontró token de autenticación.');
+    }
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+
+    return this.http.get<TerapeutaDisponibilidad[]>(
+      `http://localhost:8080/disponibilidadTerapeuta/disponibilidad/${empleadoId}`,
+      { headers }
+    );
   }
 
 }
