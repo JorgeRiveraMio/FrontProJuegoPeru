@@ -17,4 +17,5 @@ export class MercadoPagoService {
   generarPreferencia(request: CrearPagoRequest): Observable<string> {
     return this.http.post(this._apiUrl + '/preferencia', request, { responseType: 'text' });
   }
+  
 }
