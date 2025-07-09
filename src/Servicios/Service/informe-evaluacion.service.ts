@@ -35,6 +35,11 @@ export class InformeEvaluacionService {
       const url = `${this.baseUrl}/desaprobarId/${id}`;
       return this.http.put(url, null); // null indica sin body
     }
+    actualizarComentario(id: number, comentario: string): Observable<any> {
+      return this.http.put(`${this.baseUrl}/actualizarComentario/${id}`, comentario, {
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
 
 }

@@ -21,6 +21,7 @@ export class InformeEvaluacionComponent implements OnInit {
   pacienteId: number | null = null;
   fechaUltimaTerapia: string = '';
   observaciones: string = '';
+  comentario: string = '';
   nombreUsuario: string = '';
   pdfUrl: string = '';
   informes: any[] = [];
@@ -196,7 +197,13 @@ export class InformeEvaluacionComponent implements OnInit {
         }
       });
   }
+    enviarComentario(informeId: number): void {
+      this.informeService.actualizarComentario(informeId, this.comentario).subscribe({
+    next: () => this.toastr.success('Comentario actualizado'),
+    error: () => this.toastr.error('Error al actualizar comentario')
+  });
 
+  }
   cerrarSesion(): void {
     this.usuarioService.logout();
     this.router.navigate(['/']);
