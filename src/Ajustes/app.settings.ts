@@ -1,6 +1,8 @@
-export const appsettingsCliente={
-    apiUrl:"http://localhost:8080"
-}
+import { environment } from "../environments/environment";
+
+export const appsettingsCliente = {
+    apiUrl: environment.apiUrl 
+};
 
 export const appsettingsDni={
     apiUrl:"http://localhost:8080/consultar-dni",

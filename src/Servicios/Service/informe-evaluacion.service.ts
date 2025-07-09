@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { appsettingsCliente } from '../../Ajustes/app.settings';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class InformeEvaluacionService {
 
-  private baseUrl = 'http://localhost:8080/InformeEvaluacionInicial'; 
+  private baseUrl = `${appsettingsCliente.apiUrl}/InformeEvaluacionInicial`;
 
   constructor(private http: HttpClient) {}
 
@@ -26,20 +28,20 @@ export class InformeEvaluacionService {
   obtenerPorPaciente(id: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/paciente/${id}`);
   }
-    aprobarInforme(id: number): Observable<any> {
-      const url = `${this.baseUrl}/aprobarId/${id}`;
-      return this.http.put(url, null); // null indica sin body
-    }
 
-     desaprobarInforme(id: number): Observable<any> {
-      const url = `${this.baseUrl}/desaprobarId/${id}`;
-      return this.http.put(url, null); // null indica sin body
-    }
-    actualizarComentario(id: number, comentario: string): Observable<any> {
-      return this.http.put(`${this.baseUrl}/actualizarComentario/${id}`, comentario, {
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
+  aprobarInforme(id: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/aprobarId/${id}`, null);
+  }
 
+  desaprobarInforme(id: number): Observable<any> {
+    return this.http.put(`${this.baseUrl}/desaprobarId/${id}`, null);
+  }
 
+  actualizarComentario(id: number, comentario: string): Observable<any> {
+    return this.http.put(
+      `${this.baseUrl}/actualizarComentario/${id}`,
+      comentario,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
+  }
 }
