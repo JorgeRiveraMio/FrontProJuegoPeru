@@ -17,7 +17,7 @@ import { UsuarioActual } from '../../Modelos/Entity/UsuarioActual';
   styleUrl: './pago.component.css'
 })
 export class PagoComponent implements OnInit {
-  isCollapsed = false;
+    isCollapsed = false;
     nombreUsuario: string = '';
     rolUsuario: string = '';
     idUsuario: number = 0;
