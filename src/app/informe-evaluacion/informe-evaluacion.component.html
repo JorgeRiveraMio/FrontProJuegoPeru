@@ -159,11 +159,12 @@
                  <strong>Archivo PDF:</strong>
                  <button (click)="verPdf(informe.archivoUrl)" class="btn btn-sm btn-outline-primary ms-2">Ver PDF</button>
             </div>
-             <div class="col-md-6 mb-2">
-            <strong>Cambiar estado:</strong>
-            <button (click)="aprobarInforme(informe.id)" class="btn btn-sm btn-outline-primary ms-2">APROBADO</button>
-            <button (click)="desaprobarInforme(informe.id)" class="btn btn-sm btn-outline-danger ms-2">DESAPROBADO</button>
+            <div *ngIf="rolUsuario === 'ROLE_ADMIN'" class="col-md-6 mb-2">
+                <strong>Cambiar estado:</strong>
+                <button (click)="aprobarInforme(informe.id)" class="btn btn-sm btn-outline-primary ms-2">APROBADO</button>
+                <button (click)="desaprobarInforme(informe.id)" class="btn btn-sm btn-outline-danger ms-2">DESAPROBADO</button>
             </div>
+
         </div>
         </div>
     </div>

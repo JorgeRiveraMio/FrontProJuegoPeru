@@ -48,7 +48,7 @@ export class InformeEvaluacionComponent implements OnInit {
 
       if (pacienteIdParam && !isNaN(+pacienteIdParam)) {
         this.pacienteId = +pacienteIdParam;
-        // this.soloLectura = true; // Desactívalo para pruebas
+        this.soloLectura = true; 
         this.informeService.obtenerPorPaciente(this.pacienteId).subscribe({
           next: data => this.informes = data,
           error: () => alert('Error al cargar informes del paciente')
