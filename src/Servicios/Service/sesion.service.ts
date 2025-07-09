@@ -110,9 +110,10 @@ export class SesionService {
     };
 
     return this.http.get<TerapeutaDisponibilidad[]>(
-      `http://localhost:8080/disponibilidadTerapeuta/disponibilidad/${empleadoId}`,
+      `${appsettingsCliente.apiUrl}/disponibilidadTerapeuta/disponibilidad/${empleadoId}`,
       { headers }
     );
   }
+
 
 }
