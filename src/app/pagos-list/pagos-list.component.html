@@ -1,4 +1,4 @@
-<div class="d-flex flex-column flex-md-row">
+<div class="main-content">
     <div [class.collapsed]="isCollapsed" class="sidebar">
         <button class="toggle-btn" (click)="toggleSidebar()">☰</button>
         <div class="sidebar-header p-3 border-bottom">
@@ -83,6 +83,7 @@
             </a>
         </li>
 
+
         <!-- Solo para tutor barra de navegación -->
         <li *ngIf="rolUsuario === 'ROLE_TUTOR'">
             <a routerLink="/tutelados" routerLinkActive="active" class="nav-link">
@@ -98,86 +99,53 @@
             </a>
         </li>
         </ul>
-</div>
-<div class="container mt-4">
-    <h2 class="mb-4" *ngIf="!soloLectura">Subir Informe de Evaluación Inicial</h2>
-
-    <form *ngIf="!soloLectura" (ngSubmit)="subirInforme()" #informeForm="ngForm" class="card p-4 shadow-sm bg-white rounded">
-        <div class="form-group mb-3">
-        <label for="pacienteId" class="form-label fw-semibold">Seleccione un niño</label>
-        <select [(ngModel)]="pacienteId" name="pacienteId" class="form-control" required>
-            <option [ngValue]="null" disabled>Seleccione un paciente</option>
-            <option *ngFor="let p of pacientes" [ngValue]="p.id">
-            {{ p.nombre }} {{ p.apellido }} (DNI: {{ p.dni }})
-            </option>
-        </select>
-        </div>
-
-
-        <div class="form-group mb-3">
-        <label for="fecha" class="form-label fw-semibold">Fecha Última Terapia</label>
-        <input type="date" id="fecha" [(ngModel)]="fechaUltimaTerapia" name="fechaUltimaTerapia" class="form-control" required />
-        </div>
-
-        <div class="form-group mb-3">
-        <label for="observaciones" class="form-label fw-semibold">Observaciones</label>
-        <textarea id="observaciones" [(ngModel)]="observaciones" name="observaciones" rows="3" class="form-control"></textarea>
-        </div>
-
-        <div class="form-group mb-3">
-        <label class="form-label fw-semibold">Subir PDF (Cloudinary)</label>
-        <button type="button" class="btn btn-outline-primary w-100" (click)="abrirWidget()">Subir PDF con Cloudinary</button>
-        <div *ngIf="pdfUrl" class="mt-2 text-success">Archivo cargado: {{ pdfUrl }}</div>
-        </div>
-
-        <button type="submit" class="btn btn-primary w-100">Guardar Informe</button>
-    </form>
-
-    <hr class="my-5" *ngIf="!soloLectura" />
-
-    <!-- Si no hay informes y está en modo soloLectura -->
-    <div *ngIf="informes.length === 0 && soloLectura" class="text-center mt-5">
-        <h2 class="text-muted">Este paciente aún no tiene informes registrados.</h2>
     </div>
+    <div class="perfil-card p-4">
+        <h2>Lista de Pagos</h2>
 
-    <!-- Título y lista de informes -->
-    <div *ngIf="informes.length > 0">
-        <h3 class="mb-3">Lista de Informes</h3>
+        <div *ngIf="loading">Cargando...</div>
+        <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-        <div *ngFor="let informe of informes" class="card p-4 mb-3 shadow-sm bg-light rounded">
-        <div class="row">
-            <div class="col-md-6 mb-2">
-                 <strong>Paciente:</strong> {{ informe.paciente.nombre }} {{ informe.paciente.apellido }}
-            </div>
-            <div class="col-md-6 mb-2">
-                 <strong>DNI:</strong> {{ informe.paciente.dni }}
-            </div>
-            <div class="col-md-6 mb-2">
-                 <strong>Fecha Última Terapia:</strong> {{ informe.fechaUltimaTerapia }}
-            </div>
-            <div class="col-md-6 mb-2">
-                <strong>Estado del Informe:</strong> {{ informe.estadoInforme }}
-            </div>
-            
-            <!-- <div class="col-md-12 mb-2">
-                 <strong>Observaciones:</strong> {{ informe.observaciones }}
-            </div> -->
-             <div class="form-group mb-3">
-            <label for="observaciones" class="form-label fw-semibold">Observaciones</label>
-            <textarea id="observaciones" [(ngModel)]="comentario" name="observaciones" rows="3" class="form-control"></textarea>
-             <button (click)="enviarComentario(informe.id)" class="btn btn-sm btn-outline-primary ms-2 mt-4">Enviar comentario</button>
-            </div>
-            <div class="col-md-6">
-                 <strong>Archivo PDF:</strong>
-                 <button (click)="verPdf(informe.archivoUrl)" class="btn btn-sm btn-outline-primary ms-2">Ver PDF</button>
-            </div>
-            <div *ngIf="rolUsuario === 'ROLE_ADMIN'" class="col-md-6 mb-2">
-                <strong>Cambiar estado:</strong>
-                <button (click)="aprobarInforme(informe.id)" class="btn btn-sm btn-outline-primary ms-2">APROBADO</button>
-                <button (click)="desaprobarInforme(informe.id)" class="btn btn-sm btn-outline-danger ms-2">DESAPROBADO</button>
-            </div>
-
+        <!-- Modo: Mostrar 1 pago por ID -->
+        <div *ngIf="pago && !loading">
+        <p><strong>ID:</strong> {{ pago.id }}</p>
+        <p><strong>Tutor:</strong> {{ pago.tutor.name }} {{ pago.tutor.lastname }}</p>
+        <p><strong>Sesión ID:</strong> {{ pago.sesion.id }}</p>
+        <p><strong>Monto:</strong> S/. {{ pago.monto }}</p>
+        <p><strong>Fecha de pago:</strong> {{ pago.fechaPago | date: 'medium' }}</p>
+        <p><strong>Método de pago:</strong> {{ pago.metodoPago }}</p>
+        <p><strong>Estado:</strong> {{ pago.estado }}</p>
+        <p><strong>Referencia:</strong> {{ pago.referenciaPago }}</p>
         </div>
+
+        <!-- Modo: Mostrar tabla de todos los pagos -->
+        <div *ngIf="!pago && pagos.length > 0 && !loading">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tutor</th>
+                <th>Sesión</th>
+                <th>Monto</th>
+                <th>Fecha</th>
+                <th>Método</th>
+                <th>Estado</th>
+                <th>Referencia</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let p of pagos">
+                <td>{{ p.id }}</td>
+                <td>{{ p.tutor.name }} {{ p.tutor.lastname }}</td>
+                <td>{{ p.sesion.id }}</td>
+                <td>S/. {{ p.monto }}</td>
+                <td>{{ p.fechaPago | date: 'short' }}</td>
+                <td>{{ p.metodoPago }}</td>
+                <td>{{ p.estado }}</td>
+                <td>{{ p.referenciaPago }}</td>
+            </tr>
+            </tbody>
+        </table>
         </div>
     </div>
 </div>

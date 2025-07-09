@@ -76,6 +76,13 @@
         </a>
       </li>
 
+      <li *ngIf="rolUsuario === 'ROLE_ADMIN'">
+          <a routerLink="/pagos" routerLinkActive="active" class="nav-link">
+              <i class="fa-solid fa-money-bill-wave me-2"></i>
+              <span class="link-text">Lista de Pagos</span>
+          </a>
+      </li>
+
       <!-- Solo para tutor barra de navegación -->
       <li *ngIf="rolUsuario === 'ROLE_TUTOR'">
         <a routerLink="/tutelados" routerLinkActive="active" class="nav-link">

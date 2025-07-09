@@ -60,6 +60,16 @@ export const routes: Routes = [
     {
         path: 'pago-exitoso',
         loadComponent: () => import('./pago/pago.component').then(m => m.PagoComponent)
+    },
+    {
+        path: 'pagos',
+        loadComponent: () =>
+        import('./pagos-list/pagos-list.component').then(m => m.PagosListComponent)
+    },
+    {
+        path: 'pagos/:id',
+        loadComponent: () =>
+        import('./pagos-list/pagos-list.component').then(m => m.PagosListComponent)
     }
 
 
