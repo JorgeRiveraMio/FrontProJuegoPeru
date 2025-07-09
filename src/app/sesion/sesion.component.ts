@@ -9,6 +9,7 @@ import { PacienteService } from '../../Servicios/Service/paciente.service';
 import { SesionService } from '../../Servicios/Service/sesion.service';
 import { ToastrService } from 'ngx-toastr';
 import { TerapeutaDisponibilidad } from '../../Modelos/Entity/TerapeutaDisponibilidad';
+import { MercadoPagoService } from '../../Servicios/Service/mercado-pago.service';
 
 @Component({
   selector: 'app-sesion',
@@ -30,6 +31,7 @@ export class SesionComponent implements OnInit {
   tiposSesion: any[] = [];
   horasDisponibles: string[] = [];
 
+
   constructor(
     private fb: FormBuilder,
     private usuarioService: UsuarioService,
@@ -37,14 +39,15 @@ export class SesionComponent implements OnInit {
     private tipoSesionService: tipoSesionService,
     private pacienteService: PacienteService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private pagoService: MercadoPagoService // Asegúrate de importar el servicio de pago
   ) {}
 
   ngOnInit(): void {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     this.minDate = this.formatDateToInput(tomorrow); // ✅ ZONA HORARIA LOCAL
-
+    // this.formularioSesion.get('tipoSesionId')?.valueChanges.subscribe(() => this.actualizarPrecio());
     this.formularioSesion = this.fb.group({
       pacienteId: ['', Validators.required],
       empleadoTerapeutaId: ['', Validators.required],
@@ -126,6 +129,13 @@ export class SesionComponent implements OnInit {
       }
     });
   }
+      precioSesion: number | null = null;
+
+    actualizarPrecio() {
+      const idSeleccionado = this.formularioSesion.get('tipoSesionId')?.value;
+      const tipoSeleccionado = this.tiposSesion.find(tipo => tipo.id === +idSeleccionado);
+      this.precioSesion = tipoSeleccionado?.costo ?? null;
+    }
 
   obtenerDiaSemana(fechaStr: string): string {
     const [year, month, day] = fechaStr.split('-').map(Number);
@@ -152,48 +162,110 @@ export class SesionComponent implements OnInit {
     return horas;
   }
 
-  guardarSesion(): void {
-    const formValue = this.formularioSesion.value;
-    const hora = formValue.hora;
-    const fecha = formValue.fechaSesion;
+  // guardarSesion(): void {
+  //   const formValue = this.formularioSesion.value;
+  //   const hora = formValue.hora;
+  //   const fecha = formValue.fechaSesion;
 
-    if (!hora || !fecha || this.horasDisponibles.length === 0) {
-      alert('Selecciona una hora válida disponible.');
-      return;
-    }
+  //   if (!hora || !fecha || this.horasDisponibles.length === 0) {
+  //     alert('Selecciona una hora válida disponible.');
+  //     return;
+  //   }
 
-    const fechaHoy = new Date();
-    const fechaSeleccionada = new Date(fecha);
-    fechaHoy.setHours(0, 0, 0, 0);
-    fechaSeleccionada.setHours(0, 0, 0, 0);
+  //   const fechaHoy = new Date();
+  //   const fechaSeleccionada = new Date(fecha);
+  //   fechaHoy.setHours(0, 0, 0, 0);
+  //   fechaSeleccionada.setHours(0, 0, 0, 0);
 
-    if (fechaSeleccionada <= fechaHoy) {
-      alert('La fecha debe ser posterior al día actual.');
-      return;
-    }
+  //   if (fechaSeleccionada <= fechaHoy) {
+  //     alert('La fecha debe ser posterior al día actual.');
+  //     return;
+  //   }
 
-    const sesionDto = {
-      pacienteId: Number(formValue.pacienteId),
-      empleadoTerapeutaId: Number(formValue.empleadoTerapeutaId),
-      tipoSesionId: Number(formValue.tipoSesionId),
-      fechaSesion: formValue.fechaSesion,
-      hora: formValue.hora,
-      empleadoAdminId: this.rolUsuario === 'ROLE_ADMIN' ? this.idUsuario : null,
-      estado: 'PROGRAMADA',
-      fechaRegistro: new Date().toISOString()
-    };
+  //   const sesionDto = {
+  //     pacienteId: Number(formValue.pacienteId),
+  //     empleadoTerapeutaId: Number(formValue.empleadoTerapeutaId),
+  //     tipoSesionId: Number(formValue.tipoSesionId),
+  //     fechaSesion: formValue.fechaSesion,
+  //     hora: formValue.hora,
+  //     empleadoAdminId: (this.rolUsuario === 'ROLE_ADMIN') ? this.idUsuario : null,
+  //     estado: 'PROGRAMADA',
+  //     fechaRegistro: new Date().toISOString()
+  //   };
+  //     console.log('Datos de la sesión a guardar:', sesionDto);
+  //   this.sesionService.reservarSesion(sesionDto).subscribe({
+  //     next: () => {
+  //       this.toastr.success('Sesión creada exitosamente', 'Éxito');
+  //       this.formularioSesion.reset();
+  //       this.horasDisponibles = [];
+  //     },
+  //     error: () => {
+  //       this.toastr.error('Error al crear la sesión', 'Error');
+  //     }
+  //   });
+  // }
+      guardarSesion(): void {
+      const formValue = this.formularioSesion.value;
+      const hora = formValue.hora;
+      const fecha = formValue.fechaSesion;
 
-    this.sesionService.reservarSesion(sesionDto).subscribe({
-      next: () => {
-        this.toastr.success('Sesión creada exitosamente', 'Éxito');
-        this.formularioSesion.reset();
-        this.horasDisponibles = [];
-      },
-      error: () => {
-        this.toastr.error('Error al crear la sesión', 'Error');
+      if (!hora || !fecha || this.horasDisponibles.length === 0) {
+        alert('Selecciona una hora válida disponible.');
+        return;
       }
-    });
-  }
+
+      const fechaHoy = new Date();
+      const fechaSeleccionada = new Date(fecha);
+      fechaHoy.setHours(0, 0, 0, 0);
+      fechaSeleccionada.setHours(0, 0, 0, 0);
+
+      if (fechaSeleccionada <= fechaHoy) {
+        alert('La fecha debe ser posterior al día actual.');
+        return;
+      }
+
+      const sesionDto = {
+        pacienteId: Number(formValue.pacienteId),
+        empleadoTerapeutaId: Number(formValue.empleadoTerapeutaId),
+        tipoSesionId: Number(formValue.tipoSesionId),
+        fechaSesion: formValue.fechaSesion,
+        hora: formValue.hora,
+        empleadoAdminId: (this.rolUsuario === 'ROLE_ADMIN') ? this.idUsuario : null,
+        estado: 'PROGRAMADA',
+        fechaRegistro: new Date().toISOString()
+      };
+
+      console.log('Datos de la sesión a guardar:', sesionDto);
+
+      this.sesionService.reservarSesion(sesionDto).subscribe({
+        next: (sesion) => {
+          this.toastr.success('Sesión creada exitosamente', 'Éxito');
+          this.formularioSesion.reset();
+          this.horasDisponibles = [];
+
+          const crearPagoRequest = {
+            descripcion: `Pago por sesión (${sesion.tipoSesion.nombre})`,
+            monto: sesion.tipoSesion.costo,
+            tutorId: this.idUsuario,
+            sesionId: sesion.id
+          };
+
+          this.pagoService.generarPreferencia(crearPagoRequest).subscribe({
+            next: (initPointUrl: string) => {
+              // Redirige a Mercado Pago
+              window.location.href = initPointUrl;
+            },
+            error: () => {
+              this.toastr.error('Error al generar pago', 'Error');
+            }
+          });
+        },
+        error: () => {
+          this.toastr.error('Error al crear la sesión', 'Error');
+        }
+      });
+    }
+
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;

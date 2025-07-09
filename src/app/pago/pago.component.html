@@ -92,55 +92,11 @@
       </li>
     </ul>
   </div>
-  <div class="main-content mt-4">
-    <div class="container">
-      <h3 class="text-center titulo">Crear nueva sesión</h3>
-      <form [formGroup]="formularioSesion" (ngSubmit)="guardarSesion()">
-        <div class="mb-3">
-          <label>Paciente:</label>
-          <select class="form-control" formControlName="pacienteId">
-            <option *ngFor="let paciente of pacientes" [value]="paciente.id">{{ paciente.nombre }} {{ paciente.apellido }}</option>
-          </select>
+
+    <div className="min-h-screen flex items-center justify-center bg-green-50 px-4">
+        <div className="bg-white p-8 rounded-lg shadow-md text-center max-w-md">
+           
+            <h1 className="text-3xl font-bold text-green-700 mb-2">¡Gracias por tu donación!</h1>
+            <p className="text-gray-600">Tu pago fue procesado con éxito. Estamos muy agradecidos por tu apoyo.</p>
         </div>
-
-        <div class="mb-3">
-          <label>Terapeuta:</label>
-          <select class="form-control" formControlName="empleadoTerapeutaId">
-            <option *ngFor="let terapeuta of terapeutas" [value]="terapeuta.idUsuario">{{ terapeuta.name }} {{ terapeuta.lastname }}</option>
-          </select>
         </div>
-
-       <div class="mb-3">
-        <label>Tipo de sesión:</label>
-        <select class="form-control" formControlName="tipoSesionId" (change)="actualizarPrecio()">
-          <option *ngFor="let tipo of tiposSesion" [value]="tipo.id">
-            {{ tipo.nombre }}
-          </option>
-        </select>
-      </div>
-
-      <div *ngIf="precioSesion !== null" class="mb-3">
-        <label>Precio:</label>
-        <input class="form-control" [value]="precioSesion | currency:'PEN'" readonly />
-      </div>
-
-        <div class="mb-3">
-          <label>Fecha:</label>
-          <input type="date" class="form-control" formControlName="fechaSesion" [min]="minDate">
-        </div>
-
-        <div class="mb-3">
-          <label>Hora disponible:</label>
-          <select class="form-control" formControlName="hora">
-            <option *ngFor="let hora of horasDisponibles" [value]="hora">{{ hora }}</option>
-          </select>
-          <div *ngIf="horasDisponibles.length === 0 && formularioSesion.get('fechaSesion')?.value">
-            <small class="text-danger">No hay horarios disponibles para esta fecha.</small>
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Guardar Sesión</button>
-      </form>
-    </div>
-  </div>
-</div>
