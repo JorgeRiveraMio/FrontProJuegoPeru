@@ -109,7 +109,11 @@
       
       <button *ngIf="!mostrarFormularioRegistro" class="btn btn-primary" (click)="mostrarFormulario()">Nuevo Niño</button>
 
-      <form *ngIf="mostrarFormularioRegistro" [formGroup]="TuteladosForm" (ngSubmit)="guardar()">
+      <!-- Modal Formulario Tutelado -->
+      <div *ngIf="mostrarFormularioRegistro" class="modal-backdrop-custom">
+        <div class="modal-content-custom">
+
+       <form *ngIf="mostrarFormularioRegistro" [formGroup]="TuteladosForm" (ngSubmit)="guardar()">
         <div class="row">
           <div class="col-md-6 mb-3">
             <label class="form-label">Nombre</label>
@@ -194,8 +198,9 @@
           <button type="submit" class="btn btn-primary guardar px-4" [disabled]="TuteladosForm.invalid">Guardar</button>
           <button type="button" class="btn btn-secondary cancelar" (click)="cerrarFormulario()">Cancelar</button>
         </div>
-      </form>
-
+      </form> 
+  </div>
+</div>
       <table *ngIf="!cargando && tutelados.length > 0" class="table table-striped">
         <thead>
           <tr>
